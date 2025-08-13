@@ -1,4 +1,4 @@
-package com.springboot.login_back.jwt;
+package com.springboot.lococo.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

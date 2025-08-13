@@ -1,4 +1,4 @@
-package com.springboot.login_back.config;
+package com.springboot.lococo.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

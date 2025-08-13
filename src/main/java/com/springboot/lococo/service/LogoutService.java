@@ -1,6 +1,6 @@
-package com.springboot.login_back.service;
+package com.springboot.lococo.service;
 
-import com.springboot.login_back.jwt.JwtTokenUtil; // 기존의 유틸 클래스
+import com.springboot.lococo.jwt.JwtTokenUtil; // 기존의 유틸 클래스
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;

@@ -1,4 +1,4 @@
-package com.springboot.login_back;
+package com.springboot.lococo;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

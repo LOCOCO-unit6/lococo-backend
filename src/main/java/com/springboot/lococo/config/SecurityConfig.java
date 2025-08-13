@@ -1,8 +1,8 @@
-package com.springboot.login_back.config;
+package com.springboot.lococo.config;
 
-import com.springboot.login_back.jwt.JwtTokenFilter;
-import com.springboot.login_back.model.Role;
-import com.springboot.login_back.service.UserService;
+import com.springboot.lococo.jwt.JwtTokenFilter;
+import com.springboot.lococo.model.Role;
+import com.springboot.lococo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -11,11 +11,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import javax.crypto.SecretKey;
 
 @Configuration
 @EnableWebSecurity

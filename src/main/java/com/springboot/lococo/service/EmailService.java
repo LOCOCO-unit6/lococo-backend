@@ -1,4 +1,4 @@
-package com.springboot.login_back.service;
+package com.springboot.lococo.service;
 
 
 import jakarta.mail.MessagingException;

@@ -1,4 +1,4 @@
-package com.springboot.login_back.model;
+package com.springboot.lococo.model;
 
 import jakarta.persistence.*;
 import lombok.Builder;

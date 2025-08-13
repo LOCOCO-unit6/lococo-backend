@@ -1,9 +1,9 @@
-package com.springboot.login_back.service;
+package com.springboot.lococo.service;
 
-import com.springboot.login_back.dto.LoginRequestDto;
-import com.springboot.login_back.dto.RegisterRequestDto;
-import com.springboot.login_back.model.User;
-import com.springboot.login_back.repository.UserRepository;
+import com.springboot.lococo.dto.LoginRequestDto;
+import com.springboot.lococo.dto.RegisterRequestDto;
+import com.springboot.lococo.model.User;
+import com.springboot.lococo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

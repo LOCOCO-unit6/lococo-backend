@@ -1,4 +1,4 @@
-package com.springboot.login_back.config;
+package com.springboot.lococo.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;

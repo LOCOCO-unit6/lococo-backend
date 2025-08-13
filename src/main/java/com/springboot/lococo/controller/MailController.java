@@ -1,7 +1,6 @@
-package com.springboot.login_back.controller;
+package com.springboot.lococo.controller;
 
-import com.springboot.login_back.service.EmailService;
-import com.springboot.login_back.service.VerificationService;
+import com.springboot.lococo.service.VerificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

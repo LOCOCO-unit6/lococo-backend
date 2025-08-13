@@ -1,4 +1,4 @@
-package com.springboot.login_back.dto;
+package com.springboot.lococo.dto;
 
 import lombok.Getter;
 import lombok.Setter;

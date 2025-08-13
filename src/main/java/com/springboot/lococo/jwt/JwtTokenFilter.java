@@ -1,7 +1,7 @@
-package com.springboot.login_back.jwt;
+package com.springboot.lococo.jwt;
 
-import com.springboot.login_back.model.User;
-import com.springboot.login_back.service.UserService;
+import com.springboot.lococo.model.User;
+import com.springboot.lococo.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

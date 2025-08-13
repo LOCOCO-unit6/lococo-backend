@@ -1,5 +1,5 @@
 
-package com.springboot.login_back.service;
+package com.springboot.lococo.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

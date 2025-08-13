@@ -1,7 +1,7 @@
-package com.springboot.login_back.dto;
+package com.springboot.lococo.dto;
 
-import com.springboot.login_back.model.Role;
-import com.springboot.login_back.model.User;
+import com.springboot.lococo.model.Role;
+import com.springboot.lococo.model.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

@@ -1,16 +1,16 @@
-package com.springboot.login_back.controller;
+package com.springboot.lococo.controller;
 
-import com.springboot.login_back.dto.LoginRequestDto;
-import com.springboot.login_back.dto.RegisterRequestDto;
-import com.springboot.login_back.jwt.JwtTokenUtil;
-import com.springboot.login_back.service.LogoutService;
-import com.springboot.login_back.service.UserService;
+import com.springboot.lococo.dto.LoginRequestDto;
+import com.springboot.lococo.dto.RegisterRequestDto;
+import com.springboot.lococo.jwt.JwtTokenUtil;
+import com.springboot.lococo.service.LogoutService;
+import com.springboot.lococo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import com.springboot.login_back.model.User;
+import com.springboot.lococo.model.User;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package com.springboot.login_back.model;
+package com.springboot.lococo.model;
 
 public enum Role {
     USER,

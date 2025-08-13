@@ -1,6 +1,6 @@
-package com.springboot.login_back.repository;
+package com.springboot.lococo.repository;
 
-import com.springboot.login_back.model.User;
+import com.springboot.lococo.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
