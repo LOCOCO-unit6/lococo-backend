@@ -68,6 +68,7 @@ public class MyPageService {
         review.setTargetType(requestDto.getTargetType());
         review.setTargetName(requestDto.getTargetName());
         review.setImageUrl(requestDto.getImageUrl());
+        review.setUserId(requestDto.getUserId());
         
         return reviewRepository.save(review);
     }

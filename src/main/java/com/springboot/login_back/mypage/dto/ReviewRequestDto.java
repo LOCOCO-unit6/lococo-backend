@@ -10,4 +10,5 @@ public class ReviewRequestDto {
     private String targetType;
     private String targetName;
     private String imageUrl;
+    private Long userId; // 리뷰 작성자 ID
 }
