@@ -1,6 +1,7 @@
 package com.springboot.content.controller;
 
 import com.springboot.content.dto.ContentCreateDto;
+import com.springboot.content.dto.ContentResponseDto;
 import com.springboot.content.dto.ContentUpdateDto;
 import com.springboot.content.model.ContentEntity;
 import com.springboot.content.repository.ContentRepository;
@@ -20,16 +21,22 @@ public class ContentsController {
 
 
     @PostMapping("/content")
-    public ResponseEntity<String> createContent(@RequestBody ContentCreateDto contentCreateDto) {
-        contentService.addText(contentCreateDto);
-        return ResponseEntity.ok("컨텐츠 생성 성공");
+    public ResponseEntity<ContentResponseDto> createContent(@RequestBody ContentCreateDto contentCreateDto) {
+        ContentEntity newContent = contentService.addText(contentCreateDto);
+        ContentResponseDto responseDto = new ContentResponseDto(newContent);
+
+        // ✅ 201 Created 상태와 함께 생성된 데이터를 응답
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
 
     }
 
     @PutMapping("/content/{contentId}")
-    public ResponseEntity<String> updateContent(@PathVariable Long contentId, @RequestBody ContentUpdateDto contentUpdateDto) {
-        contentService.updateContent(contentId, contentUpdateDto);
-        return ResponseEntity.ok("컨텐츠 수정 성공");
+    public ResponseEntity<ContentResponseDto> updateContent(@PathVariable Long contentId, @RequestBody ContentUpdateDto contentUpdateDto) {
+        ContentEntity updatedContent = contentService.updateContent(contentId, contentUpdateDto);
+        ContentResponseDto responseDto = new ContentResponseDto(updatedContent);
+
+        // ✅ 200 OK 상태와 함께 수정된 데이터를 응답
+        return ResponseEntity.ok(responseDto);
 
     }
 
