@@ -1,9 +1,13 @@
-package com.springboot.login_back.mypage.controller;
+package com.springboot.login_back.user.mypage.controller;
 
-import com.springboot.login_back.mypage.dto.*;
-import com.springboot.login_back.mypage.model.Review;
-import com.springboot.login_back.mypage.service.MyPageService;
+
 import com.springboot.login_back.model.User;
+import com.springboot.login_back.user.mypage.model.Review;
+import com.springboot.login_back.user.mypage.dto.ContentResponseDto;
+import com.springboot.login_back.user.mypage.dto.JourneyResponseDto;
+import com.springboot.login_back.user.mypage.dto.ReviewRequestDto;
+import com.springboot.login_back.user.mypage.dto.UserUpdateRequestDto;
+import com.springboot.login_back.user.mypage.service.MyPageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,4 +1,4 @@
-package com.springboot.login_back.mypage.dto;
+package com.springboot.login_back.user.mypage.dto;
 
 import lombok.Data;
 import java.time.LocalDateTime;

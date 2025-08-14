@@ -1,4 +1,4 @@
-package com.springboot.login_back.mypage.model;
+package com.springboot.login_back.user.mypage.model;
 
 import jakarta.persistence.*;
 import lombok.Data;

@@ -1,10 +1,18 @@
-package com.springboot.login_back.mypage.service;
+package com.springboot.login_back.user.mypage.service;
 
-import com.springboot.login_back.mypage.dto.*;
-import com.springboot.login_back.mypage.model.*;
-import com.springboot.login_back.mypage.repository.*;
+
 import com.springboot.login_back.model.User;
 import com.springboot.login_back.repository.UserRepository;
+import com.springboot.login_back.user.mypage.model.Review;
+import com.springboot.login_back.user.mypage.dto.ContentResponseDto;
+import com.springboot.login_back.user.mypage.dto.JourneyResponseDto;
+import com.springboot.login_back.user.mypage.dto.ReviewRequestDto;
+import com.springboot.login_back.user.mypage.dto.UserUpdateRequestDto;
+import com.springboot.login_back.user.mypage.model.Content;
+import com.springboot.login_back.user.mypage.model.Journey;
+import com.springboot.login_back.user.mypage.repository.ContentRepository;
+import com.springboot.login_back.user.mypage.repository.JourneyRepository;
+import com.springboot.login_back.user.mypage.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

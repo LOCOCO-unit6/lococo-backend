@@ -1,6 +1,7 @@
-package com.springboot.login_back.mypage.repository;
+package com.springboot.login_back.user.mypage.repository;
 
-import com.springboot.login_back.mypage.model.Review;
+
+import com.springboot.login_back.user.mypage.model.Review;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.List;
