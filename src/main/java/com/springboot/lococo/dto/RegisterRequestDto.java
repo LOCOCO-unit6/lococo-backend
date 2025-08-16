@@ -15,9 +15,11 @@ public class RegisterRequestDto {
     private String password;
     private String email;
     private String phoneNumber;
-    private String affiliation;
     private String role;
     private String passwordCheck;
+    //소속이랑 이름 같이 씀
+    private String name;
+    private String affiliation;
 
     /*
     public User toEntity(){
@@ -39,6 +41,7 @@ public class RegisterRequestDto {
                 .password(encodedPassword)
                 .email(this.email)
                 .phoneNumber(this.phoneNumber)
+                .affiliation(this.name)
                 .affiliation(this.affiliation)
                 .role(Role.USER)
                 .build();

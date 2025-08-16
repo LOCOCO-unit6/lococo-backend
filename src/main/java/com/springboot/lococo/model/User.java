@@ -31,8 +31,12 @@ public class User {
     @Column(name = "phoneNumber", nullable = false)
     private String phoneNumber;
 
+    //이름
+    @Column(name = "name")
+    private String name;
+
     //소속
-    @Column(name = "affiliation", nullable = false)
+    @Column(name = "affiliation")
     private String affiliation;
 
     //관리자, 이용자 구분

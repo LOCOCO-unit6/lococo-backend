@@ -12,21 +12,21 @@ public class MailController {
 
     private final VerificationService verificationService;
 
-    /** 1) 인증코드 전송 */
+    //인증코드 전송
     @PostMapping("/send-code")
     public ResponseEntity<Void> sendCode(@RequestParam String email) {
         verificationService.sendCode(email);
         return ResponseEntity.ok().build();
     }
 
-    /** 2) 코드 검증 */
+    //코드 검증
     @PostMapping("/verify-code")
     public ResponseEntity<Boolean> verifyCode(@RequestParam String email, @RequestParam String code) {
         boolean ok = verificationService.verifyCode(email, code);
         return ResponseEntity.ok(ok);
     }
 
-    /** 3) 인증 상태 확인 (프론트에서 폼 제출 전 체크용) */
+    //인증 상태 확인 (프론트에서 폼 제출 전 체크용)
     @GetMapping("/status")
     public ResponseEntity<Boolean> status(@RequestParam String email) {
         return ResponseEntity.ok(verificationService.isVerified(email));
