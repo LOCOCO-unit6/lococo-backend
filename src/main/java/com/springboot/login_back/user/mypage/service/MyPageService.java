@@ -15,6 +15,7 @@ import com.springboot.login_back.user.mypage.repository.JourneyRepository;
 import com.springboot.login_back.user.mypage.repository.ReviewRepository;
 import com.springboot.login_back.user.mypage.repository.UserFavoriteContentRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,38 +32,47 @@ public class MyPageService {
     private final JourneyRepository journeyRepository;
     private final ReviewRepository reviewRepository;
     private final UserFavoriteContentRepository userFavoriteContentRepository;
+    private final PasswordEncoder passwordEncoder;
 
     // 회원정보 수정
     public User updateUserInfo(Long userId, UserUpdateRequestDto requestDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
+        if (requestDto.getIdentification() != null) user.setIdentification(requestDto.getIdentification());
         if (requestDto.getEmail() != null) user.setEmail(requestDto.getEmail());
         if (requestDto.getPhoneNumber() != null) user.setPhoneNumber(requestDto.getPhoneNumber());
-        if (requestDto.getAffiliation() != null) user.setAffiliation(requestDto.getAffiliation());
+
+        if(requestDto.getPassword() != null) {
+            if(!requestDto.getPassword().equals(requestDto.getPasswordConfirm())) {
+                throw new RuntimeException("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+            }
+            user.setPassword(passwordEncoder.encode(requestDto.getPassword()));
+        }
+
 
         return userRepository.save(user);
     }
 
-    // 콘텐츠 모아보기
-    @Transactional(readOnly = true)
-    public List<ContentResponseDto> getAllContents() {
-        return contentRepository.findAll()
-                .stream()
-                .map(content -> {
-                    ContentResponseDto dto = new ContentResponseDto();
-                    dto.setId(content.getId());
-                    dto.setTitle(content.getTitle());
-                    dto.setDescription(content.getDescription());
-                    dto.setType(content.getType());
-                    dto.setLocation(content.getLocation());
-                    dto.setImageUrl(content.getImageUrl());
-                    dto.setCreatedAt(content.getCreatedAt());
-                    dto.setUpdatedAt(content.getUpdatedAt());
-                    return dto;
-                })
-                .collect(Collectors.toList());
-    }
+//    // 콘텐츠 모아보기
+//    @Transactional(readOnly = true)
+//    public List<ContentResponseDto> getAllContents() {
+//        return contentRepository.findAll()
+//                .stream()
+//                .map(content -> {
+//                    ContentResponseDto dto = new ContentResponseDto();
+//                    dto.setId(content.getId());
+//                    dto.setTitle(content.getTitle());
+//                    dto.setDescription(content.getDescription());
+//                    dto.setType(content.getType());
+//                    dto.setLocation(content.getLocation());
+//                    dto.setImageUrl(content.getImageUrl());
+//                    dto.setCreatedAt(content.getCreatedAt());
+//                    dto.setUpdatedAt(content.getUpdatedAt());
+//                    return dto;
+//                })
+//                .collect(Collectors.toList());
+//    }
 
 
     @Transactional(readOnly = true)
