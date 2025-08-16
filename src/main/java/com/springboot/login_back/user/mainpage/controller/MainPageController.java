@@ -23,7 +23,7 @@ public class MainPageController {
     }
     
     // 카테고리별 추천 코스 조회
-    @GetMapping("/recommended-courses/category/{category}")
+    @GetMapping("/recommended-courses/{category}")
     public ResponseEntity<List<RecommendedCourseResponseDto>> getRecommendedCoursesByCategory(
             @PathVariable String category) {
         List<RecommendedCourseResponseDto> courses = mainPageService.getRecommendedCoursesByCategory(category);
@@ -36,12 +36,12 @@ public class MainPageController {
         List<ReviewResponseDto> reviews = mainPageService.getRecentReviews();
         return ResponseEntity.ok(reviews);
     }
-    
-    // 평점별 이용 후기 조회
-    @GetMapping("/reviews/rating/{minRating}")
-    public ResponseEntity<List<ReviewResponseDto>> getReviewsByRating(
-            @PathVariable Integer minRating) {
-        List<ReviewResponseDto> reviews = mainPageService.getReviewsByRating(minRating);
+
+    // 평점 높은 순 상위 10개 이용 후기 조회
+    @GetMapping("/reviews/top-rated")
+    public ResponseEntity<List<ReviewResponseDto>> getTopRatedReviews() {
+        List<ReviewResponseDto> reviews = mainPageService.getTop10ReviewsByRating();
         return ResponseEntity.ok(reviews);
     }
+
 }

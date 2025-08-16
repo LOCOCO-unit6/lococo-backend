@@ -65,10 +65,10 @@ public class MainPageService {
                 .collect(Collectors.toList());
     }
 
-    // 평점별 이용 후기 조회 (minRating 이상)
+    // 평점 5점부터 높은 순 10개 이용 후기 조회
     @Transactional(readOnly = true)
-    public List<ReviewResponseDto> getReviewsByRating(Integer minRating) {
-        return reviewRepository.findByRatingGreaterThanEqualOrderByCreatedAtDesc(minRating)
+    public List<ReviewResponseDto> getTop10ReviewsByRating() {
+        return reviewRepository.findTop10ByRating(5)
                 .stream()
                 .map(review -> {
                     ReviewResponseDto dto = new ReviewResponseDto();
@@ -80,4 +80,6 @@ public class MainPageService {
                 })
                 .collect(Collectors.toList());
     }
+
+
 }

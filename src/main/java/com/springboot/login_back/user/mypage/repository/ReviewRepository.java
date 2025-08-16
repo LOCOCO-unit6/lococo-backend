@@ -8,10 +8,7 @@ import java.util.List;
 
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
-    List<Review> findByTargetType(String targetType);
-    List<Review> findByTargetNameContaining(String targetName);
-    List<Review> findByRatingGreaterThanEqual(Integer rating);
     List<Review> findTop10ByOrderByCreatedAtDesc();
-    List<Review> findByRatingGreaterThanEqualOrderByCreatedAtDesc(Integer rating);
     List<Review> findByUserIdOrderByCreatedAtDesc(Long userId);
+    List<Review> findTop10ByRating(Integer rating);
 }
