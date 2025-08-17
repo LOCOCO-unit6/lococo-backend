@@ -1,7 +1,10 @@
 package com.springboot.login_back.user.mypage.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -10,6 +13,9 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "reviews")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +26,6 @@ public class Review {
 
     @Column(columnDefinition = "TEXT")
     private String content; // 후기글
-
     @Column(nullable = false)
     private Integer rating; // 1-5점
 

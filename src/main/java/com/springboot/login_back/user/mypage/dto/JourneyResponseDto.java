@@ -1,9 +1,11 @@
 package com.springboot.login_back.user.mypage.dto;
 
+import lombok.Builder;
 import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
+@Builder
 public class JourneyResponseDto {
     private Long id;
     private String title;
