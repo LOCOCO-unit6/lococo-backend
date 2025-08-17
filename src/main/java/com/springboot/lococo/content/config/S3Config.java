@@ -1,4 +1,4 @@
-package com.springboot.content.config;
+package com.springboot.lococo.content.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

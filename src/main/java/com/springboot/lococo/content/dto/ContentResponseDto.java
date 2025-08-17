@@ -1,17 +1,13 @@
-package com.springboot.content.dto;
+package com.springboot.lococo.content.dto;
 
-import com.springboot.content.model.ContentEntity;
-
+import com.springboot.lococo.content.model.ContentEntity;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.time.LocalDate;
 
 @Getter
-@Setter
-@NoArgsConstructor
-public class ContentCreateDto {
+public class ContentResponseDto {
+    private final Long id; // ✅ ID 필드가 존재합니다.
     private String name;
     private String location;
     private LocalDate startDate;
@@ -21,7 +17,9 @@ public class ContentCreateDto {
     private String text;
     private String imageUrl;
 
-    public ContentCreateDto(ContentEntity entity) {
+
+    public ContentResponseDto(ContentEntity entity) {
+        this.id = entity.getId();
 
         this.name = entity.getName();
         this.location = entity.getLocation();
@@ -31,8 +29,5 @@ public class ContentCreateDto {
         this.startDate = entity.getStartDate();
         this.endDate = entity.getEndDate();
         this.imageUrl = entity.getImageUrl();
-
     }
-
-
 }

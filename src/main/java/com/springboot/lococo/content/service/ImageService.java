@@ -1,4 +1,4 @@
-package com.springboot.content.service;
+package com.springboot.lococo.content.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 

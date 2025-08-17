@@ -1,9 +1,10 @@
-package com.springboot.content.service;
+package com.springboot.lococo.content.service;
 
-import com.springboot.content.dto.ContentCreateDto;
-import com.springboot.content.dto.ContentUpdateDto;
-import com.springboot.content.model.ContentEntity;
-import com.springboot.content.repository.ContentRepository;
+
+import com.springboot.lococo.content.dto.ContentCreateDto;
+import com.springboot.lococo.content.dto.ContentUpdateDto;
+import com.springboot.lococo.content.model.ContentEntity;
+import com.springboot.lococo.content.repository.ContentRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

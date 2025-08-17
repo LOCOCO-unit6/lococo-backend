@@ -1,4 +1,4 @@
-package com.springboot.content.model;
+package com.springboot.lococo.content.model;
 
 import jakarta.persistence.*;
 import lombok.Builder;

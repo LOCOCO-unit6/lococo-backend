@@ -1,10 +1,10 @@
-package com.springboot.content.controller;
+package com.springboot.lococo.content.controller;
 
-import com.springboot.content.dto.ContentCreateDto;
-import com.springboot.content.dto.ContentResponseDto;
-import com.springboot.content.dto.ContentUpdateDto;
-import com.springboot.content.model.ContentEntity;
-import com.springboot.content.service.ContentService;
+import com.springboot.lococo.content.dto.ContentCreateDto;
+import com.springboot.lococo.content.dto.ContentResponseDto;
+import com.springboot.lococo.content.dto.ContentUpdateDto;
+import com.springboot.lococo.content.model.ContentEntity;
+import com.springboot.lococo.content.service.ContentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
