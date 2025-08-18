@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface ContentRepository extends JpaRepository<Content, Long> {
+public interface OrganizerContentRepository extends JpaRepository<Content, Long> {
     List<Content> findByAffiliationOrderByCreatedAtDesc(String affiliation);
     List<Content> findByAffiliationAndTypeOrderByCreatedAtDesc(String affiliation, ContentType type);
 }
