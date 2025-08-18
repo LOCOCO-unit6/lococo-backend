@@ -1,7 +1,7 @@
-package com.springboot.lococo.user.mainpage.controller;
+package com.springboot.lococo.mainpage.controller;
 
-import com.springboot.lococo.user.mainpage.dto.*;
-import com.springboot.lococo.user.mainpage.service.MainPageService;
+import com.springboot.lococo.mainpage.dto.*;
+import com.springboot.lococo.mainpage.service.MainPageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

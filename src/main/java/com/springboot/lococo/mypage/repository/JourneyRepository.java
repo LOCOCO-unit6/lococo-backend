@@ -1,6 +1,6 @@
-package com.springboot.lococo.user.mypage.repository;
+package com.springboot.lococo.mypage.repository;
 
-import com.springboot.lococo.user.mypage.model.Journey;
+import com.springboot.lococo.mypage.model.Journey;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.List;

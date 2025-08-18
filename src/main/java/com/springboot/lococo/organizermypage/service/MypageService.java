@@ -8,9 +8,9 @@ import com.springboot.lococo.organizermypage.model.*;
 import com.springboot.lococo.organizermypage.model.Proposal;
 import com.springboot.lococo.organizermypage.model.ProposalSource;
 import com.springboot.lococo.organizermypage.model.Review;
-import com.springboot.lococo.organizermypage.repository.ContentRepository;
+import com.springboot.lococo.organizermypage.repository.OrganizerContentRepository;
+import com.springboot.lococo.organizermypage.repository.OrganizerReviewRepository;
 import com.springboot.lococo.organizermypage.repository.ProposalRepository;
-import com.springboot.lococo.organizermypage.repository.ReviewRepository;
 import com.springboot.lococo.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -26,8 +26,8 @@ public class MypageService {
 
     private final UserRepository userRepository;
     private final ProposalRepository proposalRepository;
-    private final ReviewRepository reviewRepository;
-    private final ContentRepository contentRepository;
+    private final OrganizerReviewRepository reviewRepository;
+    private final OrganizerContentRepository contentRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
     // 1) 마이페이지 요약

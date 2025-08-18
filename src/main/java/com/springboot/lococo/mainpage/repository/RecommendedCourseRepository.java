@@ -1,6 +1,6 @@
-package com.springboot.lococo.user.mainpage.repository;
+package com.springboot.lococo.mainpage.repository;
 
-import com.springboot.lococo.user.mainpage.model.RecommendedCourse;
+import com.springboot.lococo.mainpage.model.RecommendedCourse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.List;

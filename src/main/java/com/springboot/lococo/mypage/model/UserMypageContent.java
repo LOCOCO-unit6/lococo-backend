@@ -1,4 +1,4 @@
-package com.springboot.lococo.user.mypage.model;
+package com.springboot.lococo.mypage.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -8,9 +8,9 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "contents")
+@Table(name = "mypage_ontents")
 @Data
-public class Content {
+public class UserMypageContent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

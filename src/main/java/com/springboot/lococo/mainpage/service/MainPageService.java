@@ -1,9 +1,9 @@
-package com.springboot.lococo.user.mainpage.service;
+package com.springboot.lococo.mainpage.service;
 
-import com.springboot.lococo.user.mainpage.dto.*;
-import com.springboot.lococo.user.mainpage.model.*;
-import com.springboot.lococo.user.mainpage.repository.*;
-import com.springboot.lococo.user.mainpage.model.ReviewList;
+import com.springboot.lococo.mainpage.dto.*;
+import com.springboot.lococo.mainpage.model.*;
+import com.springboot.lococo.mainpage.repository.*;
+import com.springboot.lococo.mainpage.model.ReviewList;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -25,8 +25,8 @@ INSERT INTO content (title, type, thumbnail_url, link_url, affiliation, created_
 VALUES ('행궁동 골목여행 포스터', 'POSTER', 'https://picsum.photos/seed/poster1/400/240', 'https://example.com/poster/1', '용인시청', NOW());
 
 -- 리뷰
-INSERT INTO review (content_title, body, affiliation, delete_requested, created_at)
+INSERT INTO userReview (content_title, body, affiliation, delete_requested, created_at)
 VALUES ('용인 가나다 축제', '아이들과 함께 가기 좋아요!', '용인시청', false, NOW());
 
-INSERT INTO review (content_title, body, affiliation, delete_requested, created_at)
+INSERT INTO userReview (content_title, body, affiliation, delete_requested, created_at)
 VALUES ('용인 ABC 축제', '주차가 조금 불편했어요.', '용인시청', false, NOW());

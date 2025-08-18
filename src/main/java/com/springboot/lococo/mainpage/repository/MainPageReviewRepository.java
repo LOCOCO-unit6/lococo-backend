@@ -1,6 +1,6 @@
-package com.springboot.lococo.user.mainpage.repository;
+package com.springboot.lococo.mainpage.repository;
 
-import com.springboot.lococo.user.mainpage.model.ReviewList;
+import com.springboot.lococo.mainpage.model.ReviewList;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.List;

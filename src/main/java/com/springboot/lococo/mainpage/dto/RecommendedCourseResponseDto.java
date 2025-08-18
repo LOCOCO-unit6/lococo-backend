@@ -1,4 +1,4 @@
-package com.springboot.lococo.user.mainpage.dto;
+package com.springboot.lococo.mainpage.dto;
 
 import lombok.Data;
 import java.time.LocalDateTime;

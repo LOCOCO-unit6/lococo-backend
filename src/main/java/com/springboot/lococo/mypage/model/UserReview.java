@@ -1,4 +1,4 @@
-package com.springboot.lococo.user.mypage.model;
+package com.springboot.lococo.mypage.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "reviews")
 @Data
-public class Review {
+public class UserReview {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

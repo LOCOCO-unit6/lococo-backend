@@ -1,18 +1,18 @@
-package com.springboot.lococo.user.mypage.service;
+package com.springboot.lococo.mypage.service;
 
 
 import com.springboot.lococo.model.User;
+import com.springboot.lococo.mypage.model.UserMypageContent;
+import com.springboot.lococo.mypage.model.UserReview;
+import com.springboot.lococo.mypage.repository.UserContentRepository;
 import com.springboot.lococo.repository.UserRepository;
-import com.springboot.lococo.user.mypage.model.Review;
-import com.springboot.lococo.user.mypage.dto.ContentResponseDto;
-import com.springboot.lococo.user.mypage.dto.JourneyResponseDto;
-import com.springboot.lococo.user.mypage.dto.ReviewRequestDto;
-import com.springboot.lococo.user.mypage.dto.UserUpdateRequestDto;
-import com.springboot.lococo.user.mypage.model.Content;
-import com.springboot.lococo.user.mypage.model.Journey;
-import com.springboot.lococo.user.mypage.repository.ContentRepository;
-import com.springboot.lococo.user.mypage.repository.JourneyRepository;
-import com.springboot.lococo.user.mypage.repository.ReviewRepository;
+import com.springboot.lococo.mypage.dto.ContentResponseDto;
+import com.springboot.lococo.mypage.dto.JourneyResponseDto;
+import com.springboot.lococo.mypage.dto.ReviewRequestDto;
+import com.springboot.lococo.mypage.dto.UserUpdateRequestDto;
+import com.springboot.lococo.mypage.model.Journey;
+import com.springboot.lococo.mypage.repository.JourneyRepository;
+import com.springboot.lococo.mypage.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 public class MyPageService {
     
     private final UserRepository userRepository;
-    private final ContentRepository contentRepository;
+    private final UserContentRepository userContentRepository;
     private final JourneyRepository journeyRepository;
     private final ReviewRepository reviewRepository;
     
@@ -51,7 +51,7 @@ public class MyPageService {
     // 콘텐츠 모아보기
     @Transactional(readOnly = true)
     public List<ContentResponseDto> getAllContents() {
-        List<Content> contents = contentRepository.findAll();
+        List<UserMypageContent> contents = userContentRepository.findAll();
         return contents.stream()
                 .map(this::convertToContentDto)
                 .collect(Collectors.toList());
@@ -68,47 +68,47 @@ public class MyPageService {
     }
     
     // 리뷰 작성
-    public Review createReview(ReviewRequestDto requestDto) {
-        Review review = new Review();
-        review.setTitle(requestDto.getTitle());
-        review.setContent(requestDto.getContent());
-        review.setRating(requestDto.getRating());
-        review.setTargetType(requestDto.getTargetType());
-        review.setTargetName(requestDto.getTargetName());
-        review.setImageUrl(requestDto.getImageUrl());
-        review.setUserId(requestDto.getUserId());
+    public UserReview createReview(ReviewRequestDto requestDto) {
+        UserReview userReview = new UserReview();
+        userReview.setTitle(requestDto.getTitle());
+        userReview.setContent(requestDto.getContent());
+        userReview.setRating(requestDto.getRating());
+        userReview.setTargetType(requestDto.getTargetType());
+        userReview.setTargetName(requestDto.getTargetName());
+        userReview.setImageUrl(requestDto.getImageUrl());
+        userReview.setUserId(requestDto.getUserId());
         
-        return reviewRepository.save(review);
+        return reviewRepository.save(userReview);
     }
     
     // 리뷰 수정
-    public Review updateReview(Long reviewId, ReviewRequestDto requestDto) {
-        Review review = reviewRepository.findById(reviewId)
+    public UserReview updateReview(Long reviewId, ReviewRequestDto requestDto) {
+        UserReview userReview = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new RuntimeException("리뷰를 찾을 수 없습니다."));
         
         if (requestDto.getTitle() != null) {
-            review.setTitle(requestDto.getTitle());
+            userReview.setTitle(requestDto.getTitle());
         }
         if (requestDto.getContent() != null) {
-            review.setContent(requestDto.getContent());
+            userReview.setContent(requestDto.getContent());
         }
         if (requestDto.getRating() != null) {
-            review.setRating(requestDto.getRating());
+            userReview.setRating(requestDto.getRating());
         }
         if (requestDto.getTargetType() != null) {
-            review.setTargetType(requestDto.getTargetType());
+            userReview.setTargetType(requestDto.getTargetType());
         }
         if (requestDto.getTargetName() != null) {
-            review.setTargetName(requestDto.getTargetName());
+            userReview.setTargetName(requestDto.getTargetName());
         }
         if (requestDto.getImageUrl() != null) {
-            review.setImageUrl(requestDto.getImageUrl());
+            userReview.setImageUrl(requestDto.getImageUrl());
         }
         
-        return reviewRepository.save(review);
+        return reviewRepository.save(userReview);
     }
     
-    private ContentResponseDto convertToContentDto(Content content) {
+    private ContentResponseDto convertToContentDto(UserMypageContent content) {
         ContentResponseDto dto = new ContentResponseDto();
         dto.setId(content.getId());
         dto.setTitle(content.getTitle());

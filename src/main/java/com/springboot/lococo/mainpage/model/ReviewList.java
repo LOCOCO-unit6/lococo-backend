@@ -1,4 +1,4 @@
-package com.springboot.lococo.user.mainpage.model;
+package com.springboot.lococo.mainpage.model;
 
 import jakarta.persistence.*;
 import lombok.Data;

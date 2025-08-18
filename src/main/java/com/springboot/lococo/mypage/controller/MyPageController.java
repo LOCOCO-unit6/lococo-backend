@@ -1,13 +1,13 @@
-package com.springboot.lococo.user.mypage.controller;
+package com.springboot.lococo.mypage.controller;
 
 
 import com.springboot.lococo.model.User;
-import com.springboot.lococo.user.mypage.model.Review;
-import com.springboot.lococo.user.mypage.dto.ContentResponseDto;
-import com.springboot.lococo.user.mypage.dto.JourneyResponseDto;
-import com.springboot.lococo.user.mypage.dto.ReviewRequestDto;
-import com.springboot.lococo.user.mypage.dto.UserUpdateRequestDto;
-import com.springboot.lococo.user.mypage.service.MyPageService;
+import com.springboot.lococo.mypage.dto.ContentResponseDto;
+import com.springboot.lococo.mypage.model.UserReview;
+import com.springboot.lococo.mypage.service.MyPageService;
+import com.springboot.lococo.mypage.dto.JourneyResponseDto;
+import com.springboot.lococo.mypage.dto.ReviewRequestDto;
+import com.springboot.lococo.mypage.dto.UserUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -46,17 +46,17 @@ public class MyPageController {
     
     // 리뷰 작성
     @PostMapping("/reviews")
-    public ResponseEntity<Review> createReview(@RequestBody ReviewRequestDto requestDto) {
-        Review createdReview = myPageService.createReview(requestDto);
-        return ResponseEntity.ok(createdReview);
+    public ResponseEntity<UserReview> createReview(@RequestBody ReviewRequestDto requestDto) {
+        UserReview createdUserReview = myPageService.createReview(requestDto);
+        return ResponseEntity.ok(createdUserReview);
     }
     
     // 리뷰 수정
     @PutMapping("/reviews/{reviewId}")
-    public ResponseEntity<Review> updateReview(
+    public ResponseEntity<UserReview> updateReview(
             @PathVariable Long reviewId,
             @RequestBody ReviewRequestDto requestDto) {
-        Review updatedReview = myPageService.updateReview(reviewId, requestDto);
-        return ResponseEntity.ok(updatedReview);
+        UserReview updatedUserReview = myPageService.updateReview(reviewId, requestDto);
+        return ResponseEntity.ok(updatedUserReview);
     }
 }

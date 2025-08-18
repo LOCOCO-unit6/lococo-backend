@@ -1,4 +1,4 @@
-package com.springboot.lococo.user.mypage.dto;
+package com.springboot.lococo.mypage.dto;
 
 import lombok.Data;
 
