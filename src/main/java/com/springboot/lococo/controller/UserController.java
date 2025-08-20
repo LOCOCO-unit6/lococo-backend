@@ -64,7 +64,7 @@ public class UserController {
         Map<String, Object> body = new HashMap<>();
         body.put("token", jwtToken);
         body.put("user", user);
-        //body.put("email", user.getEmail());
+        body.put("message", "로그인 성공");
 
         return ResponseEntity.ok(body);
     }
