@@ -15,7 +15,7 @@ public class RegisterRequestDto {
     private String password;
     private String email;
     private String phoneNumber;
-    private String role;
+    private Role role;
     private String passwordCheck;
     //소속이랑 이름 같이 씀
     private String name;
@@ -43,7 +43,7 @@ public class RegisterRequestDto {
                 .phoneNumber(this.phoneNumber)
                 .affiliation(this.name)
                 .affiliation(this.affiliation)
-                .role(Role.USER)
+                .role(this.role)
                 .build();
     }
 }
