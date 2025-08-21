@@ -57,15 +57,15 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             return;
         }
 
-        // Jwt Token에서 email 추출
-        String email = JwtTokenUtil.getLoginId(token, secretKey);
+        // Jwt Token에서 아이디 추출
+        String identification = JwtTokenUtil.getLoginId(token, secretKey);
 
         // 추출한 email로 User 찾기
-        User loginUser = userService.getLoginUserByLoginId(email);
+        User loginUser = userService.getLoginUserByLoginId(identification);
 
         // loginUser 정보로 UsernamePasswordAuthenticationToken 발급
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                loginUser.getEmail(), null, List.of(new SimpleGrantedAuthority(loginUser.getRole().name())));
+                loginUser.getIdentification(), null, List.of(new SimpleGrantedAuthority(loginUser.getRole().name())));
         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
         // 권한 부여

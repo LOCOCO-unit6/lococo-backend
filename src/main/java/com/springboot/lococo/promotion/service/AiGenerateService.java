@@ -10,9 +10,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Collections;
+import java.util.Map;
+
 @Service
 public class AiGenerateService {
-    // application.properties에서 API 키와 URL을 안전하게 주입받음
     @Value("${gemini.api.key}")
     private String apiKey;
 
@@ -23,33 +25,30 @@ public class AiGenerateService {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public String generateContent(String prompt) {
-        // 1. HTTP 요청 헤더 설정
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        // API 키를 쿼리 파라미터로 추가
         String fullApiUrl = apiUrl + "?key=" + apiKey;
 
-        // 2. Gemini API가 요구하는 형식에 맞게 요청 본문(Body) 생성
-        String requestBody = String.format(
-                "{\"contents\":[{\"parts\":[{\"text\":\"%s\"}]}]}",
-                prompt
-        );
+        Map<String, Object> part = Map.of("text", prompt);
+        Map<String, Object> contents = Map.of("parts", Collections.singletonList(part));
+        Map<String, Object> requestBody = Map.of("contents", Collections.singletonList(contents));
 
-        // 3. 헤더와 본문을 합쳐서 HTTP 요청 객체 생성
-        HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, headers);
+        HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
 
         try {
-            // 4. RestTemplate을 사용하여 외부 API에 POST 요청 보내기
             ResponseEntity<String> responseEntity = restTemplate.postForEntity(fullApiUrl, requestEntity, String.class);
+            String rawResponse = responseEntity.getBody();
 
-            // 5. 응답(JSON)에서 텍스트 부분만 파싱하여 추출
-            JsonNode root = objectMapper.readTree(responseEntity.getBody());
+            // 💡 응답 문자열에서 마크다운 문자를 제거하는 로직 추가
+            String cleanJsonString = rawResponse.replaceAll("```json", "").replaceAll("```", "").trim();
+
+            JsonNode root = objectMapper.readTree(cleanJsonString);
             String generatedText = root.path("candidates").get(0).path("content").path("parts").get(0).path("text").asText();
 
             return generatedText;
 
         } catch (Exception e) {
-            // 실제 서비스에서는 로깅 등 더 정교한 예외 처리가 필요합니다.
+            System.err.println("AI 응답 생성 실패: " + e.getMessage());
             e.printStackTrace();
             return "AI 응답 생성에 실패했습니다.";
         }
