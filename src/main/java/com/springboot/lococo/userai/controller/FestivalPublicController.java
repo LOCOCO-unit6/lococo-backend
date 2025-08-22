@@ -16,7 +16,7 @@ public class FestivalPublicController {
         this.repository = repository;
     }
 
-    // 1️⃣ 리스트 (비회원용 추천, 필터 지원)
+    // 리스트 (비회원용 추천, 필터 지원) - 디자인 변경 상태 보고 수정 필요
     @GetMapping("/list")
     public List<FestivalRecommendation> getFestivals(
             @RequestParam(required = false) String location,
@@ -28,7 +28,7 @@ public class FestivalPublicController {
                 .toList();
     }
 
-    // 2️⃣ 상세 조회
+    // 상세 조회
     @GetMapping("/detail/{id}")
     public FestivalRecommendation getFestivalDetail(@PathVariable Long id) {
         return repository.findById(id)

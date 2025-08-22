@@ -19,7 +19,6 @@ public class SurveyResult {
     @Column(length = 36)
     private String id;
 
-    // 사용자 식별용(팀 상황에 맞게 String/Long 선택)
     @Column(name = "user_id")
     private String userId;
 

@@ -16,6 +16,6 @@ public class FestivalItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title;      // 축제 이름
-    private String description; // 축제 설명
+    private String title;
+    private String description;
 }

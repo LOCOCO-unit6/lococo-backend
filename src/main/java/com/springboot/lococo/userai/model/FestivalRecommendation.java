@@ -18,7 +18,7 @@ public class FestivalRecommendation {
 
     private String title;        // 축제 이름
     private String summary;      // 리스트에서 보여줄 간단 설명
-    @Column(length = 5000)
+    @Column(length = 5000)       // 5개 출력
     private String description;  // 상세 내용
     private String location;     // 위치
     private String date;         // 기간

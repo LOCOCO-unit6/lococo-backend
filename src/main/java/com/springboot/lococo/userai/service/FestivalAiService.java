@@ -48,17 +48,17 @@ public class FestivalAiService {
             String rawTitle = lines[0].trim();
             String description = lines.length > 1 ? lines[1].trim() : "";
 
-            // 1️⃣ title 전처리
+            // title 전처리
             String title = rawTitle.replace("(가상):", "").replace("**", "").trim();
 
-            // 2️⃣ summary 생성 (앞 100자)
+            // summary 생성
             String summary = description.length() > 100 ? description.substring(0, 100) + "..." : description;
 
-            // 3️⃣ location, date 추출 (정규식 활용)
+            // location, date 추출
             String location = extractPattern(description, "위치:\\s*(.+)");
             String date = extractPattern(description, "기간:\\s*(.+)");
 
-            // 4️⃣ keywords 추출 (간단하게 포함된 키워드)
+            // keywords 추출
             List<String> keywords = new ArrayList<>();
             if (description.contains("전통")) keywords.add("전통");
             if (description.contains("음악")) keywords.add("음악");
