@@ -65,19 +65,12 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             return;
         }
 
-        // Jwt Token에서 id 추출
+
+        // Jwt Token에서 아이디 추출
         String identification = JwtTokenUtil.getLoginId(token, secretKey);
-        log.info("Decoded identification from token: {}", identification);
 
-
-        // 추출한 아이디로 User 찾기
+        // 추출한 email로 User 찾기
         User loginUser = userService.getLoginUserByLoginId(identification);
-        if (loginUser == null) {
-            log.error("User not found for identification: {}. Passing request to the next filter.", identification);
-            filterChain.doFilter(request, response);
-            return;
-        }
-        log.info("User found: {}. Role: {}", loginUser.getIdentification(), loginUser.getRole().name());
 
         // loginUser 정보로 UsernamePasswordAuthenticationToken 발급
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
