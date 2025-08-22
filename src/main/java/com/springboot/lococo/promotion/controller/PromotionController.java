@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/ai/content")
+@RequestMapping("/api/v1/organizer/ai/content")
 public class PromotionController {
 
     private final PromotionService promotionService;
