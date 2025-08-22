@@ -17,8 +17,8 @@ public class InstagramPostEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "content_id", nullable = false)
-    private Long contentId;
+    @Column(name = "proposal_id", nullable = false)
+    private Long proposalId;
 
     @Column(name = "title", columnDefinition = "TEXT")
     private String title;
@@ -30,8 +30,8 @@ public class InstagramPostEntity {
     private String hashtags;
 
     @Builder
-    public InstagramPostEntity(Long contentId, String title, String content, String hashtags) {
-        this.contentId = contentId;
+    public InstagramPostEntity(Long proposalId, String title, String content, String hashtags) {
+        this.proposalId = proposalId;
         this.title = title;
         this.content = content;
         this.hashtags = hashtags;

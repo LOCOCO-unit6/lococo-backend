@@ -23,7 +23,7 @@ public class PromotionController {
     public ResponseEntity<InstagramPostResponseDto> generateInstagramPost(@RequestBody InstagramPostRequestDto requestDto) {
         try {
             InstagramPostResponseDto responseDto = promotionService.generateAndSaveInstagramPost(
-                    requestDto.getContentId(),
+                    requestDto.getProposalId(),
                     requestDto.getAdditionalText()
             );
             return ResponseEntity.ok(responseDto);
@@ -37,7 +37,7 @@ public class PromotionController {
     public ResponseEntity<BlogPostResponseDto> generateBlogPost(@RequestBody BlogPostRequestDto requestDto) {
         try {
             BlogPostResponseDto responseDto = promotionService.generateAndSaveBlogPost(
-                    requestDto.getContentId(),
+                    requestDto.getProposalId(),
                     requestDto.getAdditionalText()
             );
             return ResponseEntity.ok(responseDto);

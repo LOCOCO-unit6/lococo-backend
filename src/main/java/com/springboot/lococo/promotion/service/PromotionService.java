@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springboot.lococo.content.model.ContentEntity;
 import com.springboot.lococo.content.repository.ContentRepository;
+import com.springboot.lococo.organizermypage.model.Proposal;
+import com.springboot.lococo.organizermypage.repository.ProposalRepository;
 import com.springboot.lococo.promotion.dto.BlogPostResponseDto;
 import com.springboot.lococo.promotion.dto.BlogPostUpdateDto;
 import com.springboot.lococo.promotion.dto.InstagramPostResponseDto;
@@ -31,6 +33,7 @@ public class PromotionService {
     private final InstagramPostRepository instagramPostRepository;
     private final BlogPostRepository blogPostRepository;
     private final ObjectMapper objectMapper;
+    private final ProposalRepository proposalRepository;
 
     /**
      * 단일 인스타그램 게시물을 생성하고 저장합니다.
@@ -44,18 +47,12 @@ public class PromotionService {
     @Transactional
     public InstagramPostResponseDto generateAndSaveInstagramPost(Long contentId, String additionalText) {
         // ContentEntity 조회 (유효성 검사)
-        ContentEntity content = contentRepository.findById(contentId)
+        Proposal proposal = proposalRepository.findById(contentId)
                 .orElseThrow(() -> new IllegalArgumentException("Content not found with ID: " + contentId));
 
         // AI 프롬프트 생성을 위한 데이터 빌드
         PromptBuilder promptData = PromptBuilder.builder()
-                .name(content.getName())
-                .location(content.getLocation())
-                .startDate(content.getStartDate())
-                .endDate(content.getEndDate())
-                .organizer(content.getOrganizer())
-                .title(content.getTitle())
-                .text(content.getText())
+                .summary(proposal.getSummary())
                 .build();
 
         // AI에게 보낼 프롬프트 생성 및 응답 받기
@@ -75,7 +72,7 @@ public class PromotionService {
 
             // 엔티티 빌드 및 저장
             InstagramPostEntity postEntity = InstagramPostEntity.builder()
-                    .contentId(contentId)
+                    .proposalId(contentId)
                     .title(title)
                     .content(contentStr)
                     .hashtags(combinedHashtags)
@@ -103,18 +100,12 @@ public class PromotionService {
     @Transactional
     public BlogPostResponseDto generateAndSaveBlogPost(Long contentId, String additionalText) {
         // ContentEntity 조회 (유효성 검사)
-        ContentEntity content = contentRepository.findById(contentId)
+        Proposal proposal = proposalRepository.findById(contentId)
                 .orElseThrow(() -> new IllegalArgumentException("Content not found with ID: " + contentId));
 
         // AI 프롬프트 생성을 위한 데이터 빌드
         PromptBuilder promptData = PromptBuilder.builder()
-                .name(content.getName())
-                .location(content.getLocation())
-                .startDate(content.getStartDate())
-                .endDate(content.getEndDate())
-                .organizer(content.getOrganizer())
-                .title(content.getTitle())
-                .text(content.getText())
+                .summary(proposal.getSummary())
                 .build();
 
         // AI에게 보낼 프롬프트 생성 및 응답 받기
@@ -134,7 +125,7 @@ public class PromotionService {
 
             // 엔티티 빌드 및 저장
             BlogPostEntity blogEntity = BlogPostEntity.builder()
-                    .contentId(contentId)
+                    .proposalId(contentId)
                     .title(title)
                     .content(contentStr)
                     .hashtags(combinedHashtags)
@@ -199,7 +190,7 @@ public class PromotionService {
      * @return 해당 contentId에 속한 인스타그램 게시물 리스트
      */
     public List<InstagramPostEntity> getInstagramPostsByContentId(Long contentId) {
-        return instagramPostRepository.findByContentId(contentId);
+        return instagramPostRepository.findByProposalId(contentId);
     }
 
     /**
@@ -209,7 +200,7 @@ public class PromotionService {
      * @return 해당 contentId에 속한 블로그 게시물 리스트
      */
     public List<BlogPostEntity> getBlogPostsByContentId(Long contentId) {
-        return blogPostRepository.findByContentId(contentId);
+        return blogPostRepository.findByProposalId(contentId);
     }
 
     /**

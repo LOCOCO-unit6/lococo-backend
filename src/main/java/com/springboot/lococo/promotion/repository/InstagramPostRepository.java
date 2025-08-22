@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface InstagramPostRepository extends JpaRepository<InstagramPostEntity, Long> {
-    List<InstagramPostEntity> findByContentId(Long contentId);
+    List<InstagramPostEntity> findByProposalId(Long contentId);
 }

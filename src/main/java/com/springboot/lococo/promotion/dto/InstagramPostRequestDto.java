@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @Setter
 public class InstagramPostRequestDto {
-    private Long contentId;
+    private Long proposalId;
     private String additionalText;
 }

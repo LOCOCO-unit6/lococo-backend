@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AdditionalTextDto {
-    private Long contentId;
+    private Long proposalId;
     private String additionalText;
 }

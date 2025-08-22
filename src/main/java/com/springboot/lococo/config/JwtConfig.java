@@ -10,10 +10,6 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class JwtConfig {
     @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
-    @Bean
     public BCryptPasswordEncoder encodePassword() {
         return new BCryptPasswordEncoder();
     }

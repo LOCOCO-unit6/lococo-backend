@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface BlogPostRepository extends JpaRepository<BlogPostEntity, Long> {
-    List<BlogPostEntity> findByContentId(Long contentId);
+    List<BlogPostEntity> findByProposalId(Long contentId);
 }

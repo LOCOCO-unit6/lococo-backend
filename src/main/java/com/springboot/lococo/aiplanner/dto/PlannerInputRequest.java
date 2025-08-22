@@ -4,8 +4,6 @@ package com.springboot.lococo.aiplanner.dto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
-
 @Data
 @NoArgsConstructor
 public class PlannerInputRequest {
