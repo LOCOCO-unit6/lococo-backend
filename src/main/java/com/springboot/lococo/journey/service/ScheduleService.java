@@ -55,9 +55,6 @@ public class ScheduleService {
     }
 
 
-    private List<String> safeList(List<String> list) {
-        return list == null ? List.of() : list;
-    }
 
     public ScheduleResponseDto generateSchedule(ScheduleRequestDto requestDto) {
         String raw = geminiApiClient.generateContent(buildPrompt(requestDto));
@@ -146,6 +143,38 @@ public class ScheduleService {
         }
         return out;
     }
+
+    public List<ScheduleResponseDto> getScheduleList() {
+        List<TravelSchedule> schedules = scheduleRepository.findAll();
+        List<ScheduleResponseDto> responseList = new ArrayList<>();
+
+        for (TravelSchedule schedule : schedules) {
+            // 해당 일정의 활동들 불러오기
+            List<TravelActivity> activities = activityRepository.findBySchedule(schedule);
+
+            List<ActivityDto> activityDtos = new ArrayList<>();
+            for (TravelActivity a : activities) {
+                ActivityDto dto = new ActivityDto();
+                dto.setTime(a.getTime());
+                dto.setPlace(a.getPlace());
+                activityDtos.add(dto);
+            }
+
+            // 일정 DTO로 변환
+            ScheduleResponseDto dto = new ScheduleResponseDto(
+                    schedule.getDate().toString(),
+                    schedule.getLocation(),
+                    schedule.getTitle(),
+                    schedule.getSummary(),
+                    activityDtos
+            );
+
+            responseList.add(dto);
+        }
+
+        return responseList;
+    }
+
 }
 
 
