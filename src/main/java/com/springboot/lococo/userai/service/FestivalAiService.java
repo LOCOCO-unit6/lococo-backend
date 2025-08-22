@@ -1,6 +1,8 @@
 package com.springboot.lococo.userai.service;
 
-import com.springboot.lococo.userai.dto.SurveyRequestDto;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.springboot.lococo.survey.model.UserSurvey;
 import com.springboot.lococo.userai.model.FestivalRecommendation;
 import com.springboot.lococo.userai.repository.FestivalRecommendationRepository;
 import org.springframework.stereotype.Service;
@@ -8,8 +10,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Service
 public class FestivalAiService {
@@ -23,78 +23,57 @@ public class FestivalAiService {
         this.repository = repository;
     }
 
-    // 1. AI 추천 + DB 저장
-    public List<FestivalRecommendation> generateAndSaveFestivals(SurveyRequestDto survey) throws Exception {
-        String aiResponse = geminiService.getRawFestivalResponse(survey);
+    // AI 추천 + DB 저장
+    public List<FestivalRecommendation> generateAndSaveFestivals(UserSurvey survey) {
+        if (survey == null) return new ArrayList<>();
 
-        List<FestivalRecommendation> recommendations = parseAiResponse(aiResponse);
+        try {
+            String aiResponse = geminiService.getRawFestivalResponse(survey);
+            List<FestivalRecommendation> recommendations = parseAiResponse(aiResponse);
 
-        // DB 저장
-        repository.saveAll(recommendations);
+            // DB 저장
+            repository.saveAll(recommendations);
 
-        return recommendations;
+            return recommendations;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
     }
 
     private List<FestivalRecommendation> parseAiResponse(String aiResponse) {
         List<FestivalRecommendation> list = new ArrayList<>();
-        String[] festivalTexts = aiResponse.split("추천 축제");
+        if (aiResponse == null || aiResponse.isEmpty()) return list;
 
-        for (int i = 1; i < festivalTexts.length && list.size() < 5; i++) {
-            String text = festivalTexts[i].trim();
-            if (text.isEmpty()) continue;
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode root = mapper.readTree(aiResponse);
 
-            // 제목과 description 분리
-            String[] lines = text.split("\n", 2);
-            String rawTitle = lines[0].trim();
-            String description = lines.length > 1 ? lines[1].trim() : "";
+            if (!root.isArray()) return list;
 
-            // title 전처리
-            String title = rawTitle.replace("(가상):", "").replace("**", "").trim();
-
-            // summary 생성
-            String summary = description.length() > 100 ? description.substring(0, 100) + "..." : description;
-
-            // location, date 추출
-            String location = extractPattern(description, "위치:\\s*(.+)");
-            String date = extractPattern(description, "기간:\\s*(.+)");
-
-            // keywords 추출
-            List<String> keywords = new ArrayList<>();
-            if (description.contains("전통")) keywords.add("전통");
-            if (description.contains("음악")) keywords.add("음악");
-            if (description.contains("음식")) keywords.add("음식");
-
-            FestivalRecommendation fr = FestivalRecommendation.builder()
-                    .title(title)
-                    .description(description)
-                    .summary(summary)
-                    .location(location)
-                    .date(date)
-                    .keywords(String.join(", ", keywords))
-                    .build();
-
-            list.add(fr);
+            for (JsonNode node : root) {
+                FestivalRecommendation fr = FestivalRecommendation.builder()
+                        .title(node.path("title").asText(""))
+                        .location(node.path("location").asText("미정"))
+                        .date(node.path("date").asText("미정"))
+                        .price(node.path("price").asText("미정"))
+                        .image(node.path("image").asText(""))
+                        .description(node.path("description").asText(""))
+                        .build();
+                list.add(fr);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            // JSON 파싱 실패 시 빈 리스트 반환
         }
 
         return list;
     }
 
-    // 정규식 추출 헬퍼
-    private String extractPattern(String text, String regex) {
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(text);
-        if (matcher.find()) {
-            return matcher.group(1).trim();
-        }
-        return null;
-    }
-
-    // 리스트 조회
     public List<FestivalRecommendation> getFestivalList() {
         return repository.findAll();
     }
 
-    // 상세 조회
     public Optional<FestivalRecommendation> getFestivalDetail(Long id) {
         return repository.findById(id);
     }
