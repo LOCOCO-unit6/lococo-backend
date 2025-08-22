@@ -1,4 +1,4 @@
-package com.springboot.lococo.userai;
+package com.springboot.lococo.userai.config;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
