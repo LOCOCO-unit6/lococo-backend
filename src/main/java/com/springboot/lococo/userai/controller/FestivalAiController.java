@@ -1,56 +1,51 @@
 package com.springboot.lococo.userai.controller;
 
-import com.springboot.lococo.userai.dto.SurveyRequestDto;
+import com.springboot.lococo.survey.model.UserSurvey;
+import com.springboot.lococo.survey.repository.UserSurveyRepository;
 import com.springboot.lococo.userai.model.FestivalRecommendation;
 import com.springboot.lococo.userai.service.FestivalAiService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/user/ai/festival")
+@RequiredArgsConstructor
 public class FestivalAiController {
 
     private final FestivalAiService festivalAiService;
+    private final UserSurveyRepository surveyRepository;
 
+    // AI 기반 추천 요청
+    @PostMapping("/recommend")
+    public ResponseEntity<?> recommendFestivals(@RequestBody Map<String, Long> request) {
+        Long surveyId = request.get("surveyId");
 
+        if (surveyId == null) {
+            return ResponseEntity.badRequest().body(Map.of("message", "surveyId is required"));
+        }
 
-    public FestivalAiController(FestivalAiService festivalAiService) {
-        this.festivalAiService = festivalAiService;
+        return surveyRepository.findById(surveyId)
+                .map(survey -> {
+                    try {
+                        List<FestivalRecommendation> recommendations = festivalAiService.generateAndSaveFestivals(survey);
+                        return ResponseEntity.ok(recommendations);
+                    } catch (Exception e) {
+                        return ResponseEntity.status(500).body(Map.of("message", e.getMessage()));
+                    }
+                })
+                .orElse(ResponseEntity.status(404).body(Map.of("message", "Survey not found")));
     }
 
-    // AI 추천 + DB 저장
-    @PostMapping("/survey")
-    public Map<String, Object> recommendBySurvey(@RequestBody SurveyRequestDto survey) throws Exception {
-        List<FestivalRecommendation> saved = festivalAiService.generateAndSaveFestivals(survey);
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("message", "추천 완료!");
-        response.put("data", saved);
-
-        return response;
-    }
 
     // 리스트 조회
     @GetMapping("/list")
-    public List<Map<String, Object>> getFestivalList() {
-        List<Map<String, Object>> result = new ArrayList<>();
-        for (var f : festivalAiService.getFestivalList()) {
-            Map<String, Object> map = new HashMap<>();
-            map.put("id", f.getId());
-            map.put("title", f.getTitle());
-            map.put("summary", f.getDescription() != null
-                    ? f.getDescription().substring(0, Math.min(50, f.getDescription().length()))
-                    : "");
-            result.add(map);
-        }
-        return result;
+    public List<FestivalRecommendation> getFestivalList() {
+        return festivalAiService.getFestivalList();
     }
-
 
     // 상세 조회
     @GetMapping("/detail/{id}")

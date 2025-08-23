@@ -1,33 +1,49 @@
 package com.springboot.lococo.mypage.model;
 
+import com.springboot.lococo.model.User;
 import jakarta.persistence.*;
-import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
-@Table(name = "reviews")
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserReview {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false) private String title;
-    @Column(columnDefinition = "TEXT") private String content;
-    @Column(nullable = false) private Integer rating; // 1-5점
-    @Column(nullable = false) private String targetType; // 여행지, 맛집 등
-    @Column(nullable = false) private String targetName;
-    private String imageUrl;
-    @Column(nullable = false) private Long userId; // 리뷰 작성자 ID
+    private String title;
 
-    @CreationTimestamp
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private String location;
 
-    @UpdateTimestamp
-    @Column(nullable = false)
-    private LocalDateTime updatedAt;
+    private int rating;
+
+    @Column(length = 2000)
+    private String comment;
+
+    @ElementCollection
+    @CollectionTable(name = "review_images", joinColumns = @JoinColumn(name = "review_id"))
+    @Column(name = "image_url")
+    private List<String> imageUrls;
+
+    private String recommendation;
+
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    // 작성자 연결
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    // 여정 연결
+     @ManyToOne(fetch = FetchType.LAZY)
+     @JoinColumn(name = "journey_id")
+     private Journey journey;
 }
+
