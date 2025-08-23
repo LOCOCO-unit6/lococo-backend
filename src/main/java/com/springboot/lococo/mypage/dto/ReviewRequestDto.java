@@ -1,14 +1,25 @@
 package com.springboot.lococo.mypage.dto;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Getter
+@Setter
 public class ReviewRequestDto {
-    private String title;
-    private String content;
-    private Integer rating;
-    private String targetType;
-    private String targetName;
-    private String imageUrl;
-    private Long userId; // 리뷰 작성자 ID
+
+    private int rating;                  // 평점
+    private String comment;              // 리뷰 내용
+    private String title;                // 리뷰 제목
+    private String location;             // 장소
+    private List<String> imageUrls;      // 이미지 리스트
+    private String recommendation;       // 추천 한마디
+    private String journeyTitle;         // 여정 제목 (추가)
+
+    // 작성일자 (프론트에서 보내거나 서버에서 now() 처리 가능)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime createdAt;
 }

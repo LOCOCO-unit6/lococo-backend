@@ -1,31 +1,31 @@
 package com.springboot.lococo.mypage.model;
 
+import com.springboot.lococo.model.User;
 import jakarta.persistence.*;
-import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import java.time.LocalDateTime;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@Table(name = "mypage_ontents")
-@Data
+@Table(name = "user_mypage_content")
+@Getter
+@Setter
+@NoArgsConstructor
 public class UserMypageContent {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false) private String title;
-    @Column(columnDefinition = "TEXT") private String description;
-    @Column(nullable = false) private String type; // 여행지, 맛집, 액티비티 등
-    @Column(nullable = false) private String location;
-    private String imageUrl;
+    private String title;
 
-    @CreationTimestamp
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private String region;        // 지역 추가
+    private String description;   // 소개 추가
+    private String imageUrl;      // 이미지 URL 추가
 
-    @UpdateTimestamp
-    @Column(nullable = false)
-    private LocalDateTime updatedAt;
+    private boolean favorite;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }
