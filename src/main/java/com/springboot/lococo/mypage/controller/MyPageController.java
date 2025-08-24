@@ -40,19 +40,20 @@ public class MyPageController {
         return ResponseEntity.ok(favoriteContents);
     }
 
-    // 이번 달 진행 중 여정
-    @GetMapping("/journeys/ongoing")
-    public ResponseEntity<List<JourneyResponseDto>> getOngoingJourneys() {
-        List<JourneyResponseDto> journeys = myPageService.getOngoingJourneys();
-        return ResponseEntity.ok(journeys);
+    // 이번 달 진행 중 일정
+    @GetMapping("/schedules/ongoing")
+    public ResponseEntity<List<TravelScheduleResponseDto>> getOngoingSchedules() {
+        List<TravelScheduleResponseDto> schedules = myPageService.getOngoingSchedules();
+        return ResponseEntity.ok(schedules);
     }
 
-    // 이번 달 지난 여정
-    @GetMapping("/journeys/completed")
-    public ResponseEntity<List<JourneyResponseDto>> getCompletedJourneys() {
-        List<JourneyResponseDto> journeys = myPageService.getCompletedJourneys();
-        return ResponseEntity.ok(journeys);
+    // 지난 일정
+    @GetMapping("/schedules/completed")
+    public ResponseEntity<List<TravelScheduleResponseDto>> getCompletedSchedules() {
+        List<TravelScheduleResponseDto> schedules = myPageService.getCompletedSchedules();
+        return ResponseEntity.ok(schedules);
     }
+
 
     // 여정 삭제
     @DeleteMapping("/journeys/{journeyId}")

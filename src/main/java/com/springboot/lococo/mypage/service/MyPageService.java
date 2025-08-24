@@ -1,5 +1,6 @@
 package com.springboot.lococo.mypage.service;
 
+import com.springboot.lococo.journey.repository.TravelScheduleRepository;
 import com.springboot.lococo.model.User;
 import com.springboot.lococo.mypage.dto.*;
 import com.springboot.lococo.mypage.model.Journey;
@@ -11,6 +12,7 @@ import com.springboot.lococo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,6 +25,7 @@ public class MyPageService {
     private final UserContentRepository userContentRepository;
     private final JourneyRepository journeyRepository;
     private final ReviewRepository reviewRepository;
+    private final TravelScheduleRepository travelScheduleRepository;
 
     // 회원정보 수정
     public User updateUserInfo(Long userId, UserUpdateRequestDto requestDto) {
@@ -49,30 +52,30 @@ public class MyPageService {
                 .collect(Collectors.toList());
     }
 
-    // 진행 중 여정
-    public List<JourneyResponseDto> getOngoingJourneys() {
-        LocalDateTime now = LocalDateTime.now();
-        return journeyRepository.findByStartDateBeforeAndEndDateAfterOrderByStartDateAsc(now, now)
+    // 진행 중 일정 조회
+    public List<TravelScheduleResponseDto> getOngoingSchedules() {
+        LocalDate today = LocalDate.now();
+        return travelScheduleRepository.findByDateGreaterThanEqualOrderByDateAsc(today)
                 .stream()
-                .map(JourneyResponseDto::new)
+                .map(TravelScheduleResponseDto::new)
                 .collect(Collectors.toList());
     }
 
-    // 지난 여정
-    public List<JourneyResponseDto> getCompletedJourneys() {
-        LocalDateTime now = LocalDateTime.now();
-        return journeyRepository.findByEndDateBeforeOrderByEndDateDesc(now)
+    // 지난 일정 조회
+    public List<TravelScheduleResponseDto> getCompletedSchedules() {
+        LocalDate today = LocalDate.now();
+        return travelScheduleRepository.findByDateBeforeOrderByDateDesc(today)
                 .stream()
-                .map(JourneyResponseDto::new)
+                .map(TravelScheduleResponseDto::new)
                 .collect(Collectors.toList());
     }
 
-    // 현재 여정 (단일)
-    public JourneyResponseDto getCurrentJourney() {
-        LocalDateTime now = LocalDateTime.now();
-        List<Journey> ongoing = journeyRepository.findByStartDateBeforeAndEndDateAfterOrderByStartDateAsc(now, now);
-        return ongoing.isEmpty() ? null : new JourneyResponseDto(ongoing.get(0));
-    }
+//    // 현재 여정 (단일)
+//    public JourneyResponseDto getCurrentJourney() {
+//        LocalDateTime now = LocalDateTime.now();
+//        List<Journey> ongoing = journeyRepository.findByStartDateBeforeAndEndDateAfterOrderByStartDateAsc(now, now);
+//        return ongoing.isEmpty() ? null : new JourneyResponseDto(ongoing.get(0));
+//    }
 
     // 여정 삭제
     public void deleteJourney(Long journeyId) {
