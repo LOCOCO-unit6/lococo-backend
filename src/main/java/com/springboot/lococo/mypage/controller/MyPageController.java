@@ -61,38 +61,45 @@ public class MyPageController {
         return ResponseEntity.noContent().build();
     }
 
-    // 여정 후기 작성
+    // 여정 리뷰 작성
     @PostMapping("/journeys/{journeyId}/reviews")
     public ResponseEntity<UserReview> createJourneyReview(
             @PathVariable Long journeyId,
-            @RequestBody ReviewRequestDto requestDto) {
-        UserReview review = myPageService.createJourneyReview(journeyId, requestDto);
+            @RequestBody ReviewRequestDto requestDto,
+            @RequestParam Long userId // 로그인 사용자 ID 전달
+    ) {
+        UserReview review = myPageService.createJourneyReview(journeyId, requestDto, userId);
+        return ResponseEntity.ok(review);
+    }
+
+    // 일반 리뷰 작성
+    @PostMapping("/reviews")
+    public ResponseEntity<UserReview> createReview(
+            @RequestBody ReviewRequestDto requestDto,
+            @RequestParam Long userId // 로그인 사용자 ID 전달
+    ) {
+        UserReview review = myPageService.createReview(requestDto, userId);
         return ResponseEntity.ok(review);
     }
 
     // 리뷰 조회
-// 리뷰 조회
     @GetMapping("/reviews")
     public ResponseEntity<List<SimpleReviewResponseDto>> getReviews() {
         List<SimpleReviewResponseDto> reviews = myPageService.getReviews();
         return ResponseEntity.ok(reviews);
     }
 
-
-    // 리뷰 작성
-    @PostMapping("/reviews")
-    public ResponseEntity<UserReview> createReview(@RequestBody ReviewRequestDto requestDto) {
-        return ResponseEntity.ok(myPageService.createReview(requestDto));
-    }
-
     // 리뷰 수정
     @PutMapping("/reviews/{reviewId}")
     public ResponseEntity<UserReview> updateReview(
             @PathVariable Long reviewId,
-            @RequestBody ReviewRequestDto requestDto) {
-        return ResponseEntity.ok(myPageService.updateReview(reviewId, requestDto));
+            @RequestBody ReviewRequestDto requestDto
+    ) {
+        UserReview updated = myPageService.updateReview(reviewId, requestDto);
+        return ResponseEntity.ok(updated);
     }
 
+    // 리뷰 삭제
     @DeleteMapping("/reviews/{reviewId}")
     public ResponseEntity<Void> deleteReview(@PathVariable Long reviewId) {
         myPageService.deleteReview(reviewId);

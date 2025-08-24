@@ -80,13 +80,42 @@ public class MyPageService {
     }
 
     // 여정 후기 작성
-    public UserReview createJourneyReview(Long journeyId, ReviewRequestDto requestDto) {
+    public UserReview createJourneyReview(Long journeyId, ReviewRequestDto requestDto, Long userId) {
         Journey journey = journeyRepository.findById(journeyId)
                 .orElseThrow(() -> new IllegalArgumentException("Journey not found"));
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
         UserReview review = new UserReview();
         review.setJourney(journey);
+        review.setUser(user); // 필수
         review.setRating(requestDto.getRating());
         review.setComment(requestDto.getComment());
+        review.setTitle(requestDto.getTitle());
+        review.setLocation(requestDto.getLocation());
+        review.setRecommendation(requestDto.getRecommendation());
+        review.setImageUrls(requestDto.getImageUrls());
+        review.setCreatedAt(LocalDateTime.now()); // 서버에서 자동 처리
+
+        return reviewRepository.save(review);
+    }
+
+    // 일반 리뷰 작성
+    public UserReview createReview(ReviewRequestDto requestDto, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        UserReview review = new UserReview();
+        review.setUser(user);
+        review.setRating(requestDto.getRating());
+        review.setComment(requestDto.getComment());
+        review.setTitle(requestDto.getTitle());
+        review.setLocation(requestDto.getLocation());
+        review.setRecommendation(requestDto.getRecommendation());
+        review.setImageUrls(requestDto.getImageUrls());
+        review.setCreatedAt(LocalDateTime.now());
+
         return reviewRepository.save(review);
     }
 
@@ -98,20 +127,18 @@ public class MyPageService {
                 .collect(Collectors.toList());
     }
 
-    // 리뷰 작성
-    public UserReview createReview(ReviewRequestDto requestDto) {
-        UserReview review = new UserReview();
-        review.setRating(requestDto.getRating());
-        review.setComment(requestDto.getComment());
-        return reviewRepository.save(review);
-    }
-
     // 리뷰 수정
     public UserReview updateReview(Long reviewId, ReviewRequestDto requestDto) {
         UserReview review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new IllegalArgumentException("Review not found"));
+
         review.setRating(requestDto.getRating());
         review.setComment(requestDto.getComment());
+        review.setTitle(requestDto.getTitle());
+        review.setLocation(requestDto.getLocation());
+        review.setRecommendation(requestDto.getRecommendation());
+        review.setImageUrls(requestDto.getImageUrls());
+
         return reviewRepository.save(review);
     }
 
@@ -119,4 +146,5 @@ public class MyPageService {
     public void deleteReview(Long reviewId) {
         reviewRepository.deleteById(reviewId);
     }
+
 }
