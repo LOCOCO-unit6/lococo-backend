@@ -2,6 +2,7 @@ package com.springboot.lococo.service;
 
 import com.springboot.lococo.dto.LoginRequestDto;
 import com.springboot.lococo.dto.RegisterRequestDto;
+import com.springboot.lococo.model.Role;
 import com.springboot.lococo.model.User;
 import com.springboot.lococo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,7 @@ public class UserService {
     }
 
     //로그인
-    public User login(LoginRequestDto req) {
+    public User userLogin(LoginRequestDto req) {
         Optional<User> optionalUser = userRepository.findByIdentification(req.getIdentification());
 
         // loginId와 일치하는 User가 없으면 null return
@@ -42,6 +43,29 @@ public class UserService {
 
         // 찾아온 User의 password와 입력된 password가 다르면 null return
         if (!bCryptPasswordEncoder.matches(req.getPassword(), user.getPassword())) {
+            return null;
+        }
+
+        return user;
+    }
+
+    //주최자 로그인
+    public User adminLogin(LoginRequestDto req) {
+        Optional<User> optionalUser = userRepository.findByIdentification(req.getIdentification());
+
+        // loginId와 일치하는 User가 없으면 null return
+        if(optionalUser.isEmpty()) {
+            return null;
+        }
+
+        User user = optionalUser.get();
+
+        // 찾아온 User의 password와 입력된 password가 다르면 null return
+        if (!bCryptPasswordEncoder.matches(req.getPassword(), user.getPassword())) {
+            return null;
+        }
+
+        if (user.getRole() != Role.ADMIN) {
             return null;
         }
 

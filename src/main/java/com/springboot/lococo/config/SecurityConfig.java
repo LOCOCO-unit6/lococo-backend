@@ -34,7 +34,7 @@ public class SecurityConfig {
                 .and()
                 .addFilterBefore(new JwtTokenFilter(userService, secretKey,redisTemplate), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .requestMatchers("/api/v1/organizer/login", "/api/v1/organizer/register", "/api/v1/organizer/send-code", "/api/v1/organizer/verify-code", "/api/v1/organizer/status").permitAll()
+                .requestMatchers("/api/v1/user/login", "/api/v1/admin/login", "/api/v1/register", "/api/v1/send-code", "/api/v1/verify-code", "/api/v1/organizer/status").permitAll()
                 .requestMatchers("/api/v1/organizer/**").hasAuthority(Role.ADMIN.name())
                 .requestMatchers("/api/v1/**").authenticated()
                 .and().build();
