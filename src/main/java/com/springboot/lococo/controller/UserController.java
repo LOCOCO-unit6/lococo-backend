@@ -18,7 +18,7 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/organizer")
+@RequestMapping("/api/v1")
 public class UserController {
 
     private final UserService userService;
@@ -44,15 +44,16 @@ public class UserController {
         return "회원가입 성공";
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<Map<String, Object>> login(@RequestBody LoginRequestDto loginRequestDto) {
+    @PostMapping("/user/login")
+    public ResponseEntity<Map<String, Object>> userLogin(@RequestBody LoginRequestDto loginRequestDto) {
 
-        User user = userService.login(loginRequestDto);
+        User user = userService.userLogin(loginRequestDto);
 
-        // 로그인 아이디나 비밀번호가 틀린 경우 global error return
-//        if(user == null) {
-//            return"로그인 아이디 또는 비밀번호가 틀렸습니다.";
-//        }
+        if (user == null) {
+            Map<String, Object> errorBody = new HashMap<>();
+            errorBody.put("message", "로그인에 실패했습니다. 계정 정보를 확인하거나 관리자에게 문의하세요.");
+            return ResponseEntity.status(401).body(errorBody);
+        }
 
         // 로그인 성공 => Jwt Token 발급
 
@@ -68,6 +69,30 @@ public class UserController {
 
         return ResponseEntity.ok(body);
     }
+
+    @PostMapping("/admin/login")
+    public ResponseEntity<Map<String, Object>> adminLogin(@RequestBody LoginRequestDto loginRequestDto) {
+
+        User user = userService.adminLogin(loginRequestDto);
+
+        if (user == null) {
+            Map<String, Object> errorBody = new HashMap<>();
+            errorBody.put("message", "로그인에 실패했습니다. 계정 정보를 확인하거나 관리자에게 문의하세요.");
+            return ResponseEntity.status(401).body(errorBody);
+        }
+
+        long expireTimeMs = 1000 * 60 * 60;     // Token 유효 시간 = 60분
+
+        String jwtToken = JwtTokenUtil.createToken(user.getIdentification(), secretKey, expireTimeMs);
+
+        Map<String, Object> body = new HashMap<>();
+        body.put("token", jwtToken);
+        body.put("user", user);
+        body.put("message", "로그인 성공");
+
+        return ResponseEntity.ok(body);
+    }
+
 
     @PostMapping("/logout")
     public ResponseEntity<String> logout(@RequestHeader("Authorization") String authorizationHeader) {

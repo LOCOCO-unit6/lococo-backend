@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/organizer")
+@RequestMapping("/api/v1")
 public class MailController {
 
     private final VerificationService verificationService;
