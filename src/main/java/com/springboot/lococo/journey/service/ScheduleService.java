@@ -1,21 +1,24 @@
 package com.springboot.lococo.journey.service;
 
 import com.springboot.lococo.journey.dto.ActivityDto;
-import com.springboot.lococo.journey.dto.SchedulePublicRequestDto;
 import com.springboot.lococo.journey.dto.ScheduleRequestDto;
 import com.springboot.lococo.journey.dto.ScheduleResponseDto;
+import com.springboot.lococo.journey.dto.UserScheduleRequestDto;
 import com.springboot.lococo.journey.model.TravelActivity;
 import com.springboot.lococo.journey.model.TravelSchedule;
 import com.springboot.lococo.journey.repository.TravelActivityRepository;
 import com.springboot.lococo.journey.repository.TravelScheduleRepository;
 import com.springboot.lococo.survey.dto.SurveyRequestDto;
 import com.springboot.lococo.survey.service.SurveyService;
+import com.springboot.lococo.model.User;
+import com.springboot.lococo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +28,7 @@ public class ScheduleService {
     private final TravelActivityRepository activityRepository;
     private final GeminiApiClient geminiApiClient;
     private final SurveyService surveyService;
+    private final UserRepository userRepository;
 
     // ===== 프롬프트 생성: 설문조사 기반 =====
     private String buildPrompt(ScheduleRequestDto dto) {
@@ -98,6 +102,7 @@ public class ScheduleService {
                 .location(requestDto.getLocation())
                 .title(title)
                 .summary(summary)
+                .scheduleType(TravelSchedule.ScheduleType.AI_GENERATED)
                 .build();
         scheduleRepository.save(schedule);
 
@@ -118,6 +123,76 @@ public class ScheduleService {
                 schedule.getSummary(),
                 activities
         );
+    }
+
+    // ===== 사용자 직접 일정 생성 =====
+    public ScheduleResponseDto createUserSchedule(Long userId, UserScheduleRequestDto requestDto) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        // DB 저장
+        TravelSchedule schedule = TravelSchedule.builder()
+                .date(requestDto.getDate())
+                .location(requestDto.getLocation())
+                .title(requestDto.getTitle())
+                .summary(requestDto.getSummary())
+                .scheduleType(TravelSchedule.ScheduleType.USER_CREATED)
+                .user(user)
+                .build();
+        scheduleRepository.save(schedule);
+
+        // 활동 저장
+        if (requestDto.getActivities() != null) {
+            for (ActivityDto activityDto : requestDto.getActivities()) {
+                activityRepository.save(
+                        TravelActivity.builder()
+                                .schedule(schedule)
+                                .time(activityDto.getTime())
+                                .place(activityDto.getPlace())
+                                .build()
+                );
+            }
+        }
+
+        return new ScheduleResponseDto(
+                schedule.getDate().toString(),
+                schedule.getLocation(),
+                schedule.getTitle(),
+                schedule.getSummary(),
+                requestDto.getActivities() != null ? requestDto.getActivities() : new ArrayList<>()
+        );
+    }
+
+    // ===== 통합 일정 목록 조회 (AI + 사용자 생성) =====
+    public List<ScheduleResponseDto> getAllSchedules() {
+        return scheduleRepository.findAll()
+                .stream()
+                .map(schedule -> new ScheduleResponseDto(
+                        schedule.getDate().toString(),
+                        schedule.getLocation(),
+                        schedule.getTitle(),
+                        schedule.getSummary(),
+                        schedule.getActivities().stream()
+                                .map(activity -> new ActivityDto(activity.getTime(), activity.getPlace()))
+                                .collect(Collectors.toList())
+                ))
+                .collect(Collectors.toList());
+    }
+
+    // ===== 사용자별 일정 목록 조회 =====
+    public List<ScheduleResponseDto> getUserSchedules(Long userId) {
+        return scheduleRepository.findByUser_Id(userId)
+                .stream()
+                .map(schedule -> new ScheduleResponseDto(
+                        schedule.getDate().toString(),
+                        schedule.getLocation(),
+                        schedule.getTitle(),
+                        schedule.getSummary(),
+                        schedule.getActivities().stream()
+                                .map(activity -> new ActivityDto(activity.getTime(), activity.getPlace()))
+                                .collect(Collectors.toList())
+                ))
+                .collect(Collectors.toList());
     }
 
     // ===== 파서: "HH:MM | 장소" 만 허용, 음식/쇼핑류 필터 =====

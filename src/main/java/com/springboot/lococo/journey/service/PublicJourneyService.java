@@ -45,6 +45,7 @@ public class PublicJourneyService {
                 .location(dto.getLocation())
                 .title(title)
                 .summary(summary)
+                .scheduleType(TravelSchedule.ScheduleType.AI_GENERATED)
                 .build();
         scheduleRepository.save(schedule);
 

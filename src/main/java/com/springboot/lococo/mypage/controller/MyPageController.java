@@ -4,6 +4,7 @@ import com.springboot.lococo.model.User;
 import com.springboot.lococo.mypage.dto.*;
 import com.springboot.lococo.mypage.model.UserReview;
 import com.springboot.lococo.mypage.service.MyPageService;
+import com.springboot.lococo.journey.dto.ScheduleResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,33 +41,54 @@ public class MyPageController {
         return ResponseEntity.ok(favoriteContents);
     }
 
-    // 이번 달 진행 중 여정
-    @GetMapping("/journeys/ongoing")
-    public ResponseEntity<List<JourneyResponseDto>> getOngoingJourneys() {
-        List<JourneyResponseDto> journeys = myPageService.getOngoingJourneys();
-        return ResponseEntity.ok(journeys);
+    // 진행 중인 일정 조회
+    @GetMapping("/schedules/ongoing")
+    public ResponseEntity<List<ScheduleResponseDto>> getOngoingSchedules() {
+        List<ScheduleResponseDto> schedules = myPageService.getOngoingSchedules();
+        return ResponseEntity.ok(schedules);
     }
 
-    // 이번 달 지난 여정
-    @GetMapping("/journeys/completed")
-    public ResponseEntity<List<JourneyResponseDto>> getCompletedJourneys() {
-        List<JourneyResponseDto> journeys = myPageService.getCompletedJourneys();
-        return ResponseEntity.ok(journeys);
+    // 완료된 일정 조회
+    @GetMapping("/schedules/completed")
+    public ResponseEntity<List<ScheduleResponseDto>> getCompletedSchedules() {
+        List<ScheduleResponseDto> schedules = myPageService.getCompletedSchedules();
+        return ResponseEntity.ok(schedules);
     }
 
-    // 여정 삭제
-    @DeleteMapping("/journeys/{journeyId}")
-    public ResponseEntity<Void> deleteJourney(@PathVariable Long journeyId) {
-        myPageService.deleteJourney(journeyId);
+    // 사용자별 진행 중인 일정 조회
+    @GetMapping("/schedules/ongoing/user/{userId}")
+    public ResponseEntity<List<ScheduleResponseDto>> getOngoingSchedulesByUser(@PathVariable Long userId) {
+        List<ScheduleResponseDto> schedules = myPageService.getOngoingSchedulesByUser(userId);
+        return ResponseEntity.ok(schedules);
+    }
+
+    // 사용자별 완료된 일정 조회
+    @GetMapping("/schedules/completed/user/{userId}")
+    public ResponseEntity<List<ScheduleResponseDto>> getCompletedSchedulesByUser(@PathVariable Long userId) {
+        List<ScheduleResponseDto> schedules = myPageService.getCompletedSchedulesByUser(userId);
+        return ResponseEntity.ok(schedules);
+    }
+
+    // 현재 일정 조회
+    @GetMapping("/schedules/current")
+    public ResponseEntity<ScheduleResponseDto> getCurrentSchedule() {
+        ScheduleResponseDto currentSchedule = myPageService.getCurrentSchedule();
+        return ResponseEntity.ok(currentSchedule);
+    }
+
+    // 일정 삭제
+    @DeleteMapping("/schedules/{scheduleId}")
+    public ResponseEntity<Void> deleteSchedule(@PathVariable Long scheduleId) {
+        myPageService.deleteSchedule(scheduleId);
         return ResponseEntity.noContent().build();
     }
 
-    // 여정 후기 작성
-    @PostMapping("/journeys/{journeyId}/reviews")
-    public ResponseEntity<UserReview> createJourneyReview(
-            @PathVariable Long journeyId,
+    // 통합 일정 후기 작성 (AI 생성 + 사용자 생성 일정 모두 가능)
+    @PostMapping("/schedules/{scheduleId}/reviews")
+    public ResponseEntity<UserReview> createScheduleReview(
+            @PathVariable Long scheduleId,
             @RequestBody ReviewRequestDto requestDto) {
-        UserReview review = myPageService.createJourneyReview(journeyId, requestDto);
+        UserReview review = myPageService.createJourneyReview(scheduleId, requestDto);
         return ResponseEntity.ok(review);
     }
 

@@ -1,5 +1,6 @@
 package com.springboot.lococo.mypage.model;
 
+import com.springboot.lococo.journey.model.TravelSchedule;
 import com.springboot.lococo.model.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -41,9 +42,9 @@ public class UserReview {
     @JoinColumn(name = "user_id")
     private User user;
 
-    // 여정 연결
-     @ManyToOne(fetch = FetchType.LAZY)
-     @JoinColumn(name = "journey_id")
-     private Journey journey;
+    // AI 여정 연결 (기존 Journey 대신 TravelSchedule 사용)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "travel_schedule_id")
+    private TravelSchedule travelSchedule;
 }
 
