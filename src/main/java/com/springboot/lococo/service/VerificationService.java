@@ -1,6 +1,7 @@
 
 package com.springboot.lococo.service;
 
+import com.springboot.lococo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -15,6 +16,7 @@ public class VerificationService {
 
     private final StringRedisTemplate redis;
     private final EmailService emailService;
+    private final UserRepository userRepository;
 
     @Value("${app.verify.code-ttl-sec:600}")
     private int codeTtlSec;
@@ -30,6 +32,12 @@ public class VerificationService {
     private String generateCode() {
         int n = RND.nextInt(900000) + 100000; // 100000~999999
         return String.valueOf(n);
+    }
+
+
+    //이메일 중복체크
+    public boolean checkEmailDuplicate(String email) {
+        return userRepository.existsByEmail(email);
     }
 
     /** 코드 생성 & 메일 발송 */

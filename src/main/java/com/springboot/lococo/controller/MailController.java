@@ -1,7 +1,9 @@
 package com.springboot.lococo.controller;
 
+
 import com.springboot.lococo.service.VerificationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,11 +14,18 @@ public class MailController {
 
     private final VerificationService verificationService;
 
+
     //인증코드 전송
     @PostMapping("/send-code")
-    public ResponseEntity<Void> sendCode(@RequestParam String email) {
-        verificationService.sendCode(email);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Object> sendCode(@RequestParam String email) {
+        if(verificationService.checkEmailDuplicate(email)) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("이미 가입된 이메일입니다.");
+        }
+        else{
+            verificationService.sendCode(email);
+            return ResponseEntity.ok().build();
+        }
     }
 
     //코드 검증

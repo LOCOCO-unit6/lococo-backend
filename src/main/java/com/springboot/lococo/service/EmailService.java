@@ -1,6 +1,7 @@
 package com.springboot.lococo.service;
 
 
+import com.springboot.lococo.repository.UserRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ public class EmailService {
 
     private final JavaMailSender mailSender;
     private final SpringTemplateEngine templateEngine; // Thymeleaf 템플릿 엔진 주입
+
 
     public void sendVerificationCode(String to, String code, int minutes) {
         if (to == null || to.isBlank()) return;

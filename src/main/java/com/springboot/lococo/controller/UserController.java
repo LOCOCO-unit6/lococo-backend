@@ -7,6 +7,7 @@ import com.springboot.lococo.service.LogoutService;
 import com.springboot.lococo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -29,19 +30,24 @@ public class UserController {
     private String secretKey;
 
     @PostMapping("/register")
-    public String register(@RequestBody RegisterRequestDto registerRequestDto) {
+    public ResponseEntity<String> register(@RequestBody RegisterRequestDto registerRequestDto) {
         // loginId 중복 체크
+        // 1. 아이디 중복 시 -> 409 Conflict (실패)
         if(userService.checkLoginIdDuplicate(registerRequestDto.getIdentification())) {
-            return "로그인 아이디가 중복됩니다.";
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("로그인 아이디가 중복됩니다.");
         }
 
-        // password와 passwordCheck가 같은지 체크
+        // 2. 비밀번호 불일치 시 -> 400 Bad Request (실패)
         if(!registerRequestDto.getPassword().equals(registerRequestDto.getPasswordCheck())) {
-            return "비밀번호가 일치하지 않습니다.";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("비밀번호가 일치하지 않습니다.");
         }
 
+        // 3. 진짜 성공 시 -> 201 Created (성공)
         userService.join(registerRequestDto);
-        return "회원가입 성공";
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body("회원가입 성공");
     }
 
     @PostMapping("/user/login")
