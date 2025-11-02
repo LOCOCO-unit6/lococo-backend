@@ -6,6 +6,7 @@ import com.springboot.lococo.mypage.model.UserReview;
 import com.springboot.lococo.mypage.service.MyPageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +17,18 @@ import java.util.List;
 public class MyPageController {
 
     private final MyPageService myPageService;
+
+    @GetMapping("/userInfo")
+    public ResponseEntity<UserInfoResponseDto> getUserInfo(@AuthenticationPrincipal User user) {
+
+        //로그인 안하고 접근할 경우
+        if (user == null) {
+            return ResponseEntity.status(401).build();
+        }
+
+        UserInfoResponseDto responseDto = UserInfoResponseDto.from(user);
+        return ResponseEntity.ok(responseDto);
+    }
 
     // 회원정보 수정
     @PutMapping("/users/{userId}")

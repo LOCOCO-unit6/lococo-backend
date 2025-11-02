@@ -8,11 +8,11 @@ import java.util.Date;
 
 public class JwtTokenUtil {
     // jwt 토큰 발급
-    public static String createToken(String identification, String key, long expireTimeMs) {
+    public static String createToken(Long id, String key, long expireTimeMs) {
         // Claim = Jwt Token에 들어갈 정보
         // Claim에 loginId를 넣어 줌으로써 나중에 loginId를 꺼낼 수 있음
         Claims claims = Jwts.claims();
-        claims.put("identification", identification);
+        claims.put("id", id);
 
         return Jwts.builder()
                 .setClaims(claims)
@@ -23,7 +23,7 @@ public class JwtTokenUtil {
     }
 
     public static String getLoginId(String token, String secretKey){
-        return extractClaims(token, secretKey).get("identification").toString();
+        return extractClaims(token, secretKey).get("id").toString();
     }
 
     // 밝급된 Token이 만료 시간이 지났는지 체크

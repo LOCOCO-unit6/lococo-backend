@@ -67,19 +67,19 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
 
         // Jwt Token에서 아이디 추출
-        String identification = JwtTokenUtil.getLoginId(token, secretKey);
+        String id = JwtTokenUtil.getLoginId(token, secretKey);
 
-        // 추출한 email로 User 찾기
-        User loginUser = userService.getLoginUserByLoginId(identification);
+        // 추출한 id(pk)로 User 찾기
+        User loginUser = userService.getLoginUserById(Long.parseLong(id));
 
         // loginUser 정보로 UsernamePasswordAuthenticationToken 발급
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                loginUser.getIdentification(), null, List.of(new SimpleGrantedAuthority(loginUser.getRole().name())));
+                loginUser, null, List.of(new SimpleGrantedAuthority(loginUser.getRole().name())));
         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
         // 권한 부여
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-        log.info("Authentication successful. Setting security context for user: {}", identification);
+        log.info("Authentication successful. Setting security context for user: {}", id);
 
         filterChain.doFilter(request, response);
     }

@@ -84,14 +84,14 @@ public class UserService {
     }
 
     //identification(String)을 입력받아 User을 return 해주는 기능
-    public User getLoginUserByLoginId(String identification) {
-        if(identification == null) return null;
-
-        Optional<User> optionalUser = userRepository.findByIdentification(identification);
-        if(optionalUser.isEmpty()) return null;
-
-        return optionalUser.get();
-    }
+//    public User getLoginUserByLoginId(String identification) {
+//        if(identification == null) return null;
+//
+//        Optional<User> optionalUser = userRepository.findByIdentification(identification);
+//        if(optionalUser.isEmpty()) return null;
+//
+//        return optionalUser.get();
+//    }
 
     //
     /*

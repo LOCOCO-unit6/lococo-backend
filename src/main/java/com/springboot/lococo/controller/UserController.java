@@ -5,6 +5,8 @@ import com.springboot.lococo.dto.RegisterRequestDto;
 import com.springboot.lococo.jwt.JwtTokenUtil;
 import com.springboot.lococo.service.LogoutService;
 import com.springboot.lococo.service.UserService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import com.springboot.lococo.model.User;
+
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +28,7 @@ public class UserController {
     private final UserService userService;
     private static BCryptPasswordEncoder bCryptPasswordEncoder;
     private final LogoutService logoutService;
+
 
     @Value("${SecretKey}")
     private String secretKey;
@@ -51,7 +55,7 @@ public class UserController {
     }
 
     @PostMapping("/user/login")
-    public ResponseEntity<Map<String, Object>> userLogin(@RequestBody LoginRequestDto loginRequestDto) {
+    public ResponseEntity<Map<String, Object>> userLogin(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
 
         User user = userService.userLogin(loginRequestDto);
 
@@ -66,7 +70,9 @@ public class UserController {
 
         long expireTimeMs = 1000 * 60 * 60;     // Token 유효 시간 = 60분
 
-        String jwtToken = JwtTokenUtil.createToken(user.getIdentification(), secretKey, expireTimeMs);
+        String jwtToken = JwtTokenUtil.createToken(user.getId(), secretKey, expireTimeMs);
+
+
 
         Map<String, Object> body = new HashMap<>();
         body.put("token", jwtToken);
@@ -89,7 +95,9 @@ public class UserController {
 
         long expireTimeMs = 1000 * 60 * 60;     // Token 유효 시간 = 60분
 
-        String jwtToken = JwtTokenUtil.createToken(user.getIdentification(), secretKey, expireTimeMs);
+        String jwtToken = JwtTokenUtil.createToken(user.getId(), secretKey, expireTimeMs);
+
+
 
         Map<String, Object> body = new HashMap<>();
         body.put("token", jwtToken);
