@@ -1,5 +1,6 @@
 package com.springboot.lococo.content.model;
 
+import com.springboot.lococo.model.User;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,6 +36,8 @@ public class ContentEntity {
     @Column(name = "organizer", nullable = false)
     private String organizer;
 
+    @Column(name = "category", nullable = false)
+    private String category;
 
 
     //콘텐츠 상세
@@ -45,11 +48,13 @@ public class ContentEntity {
     private String text;
 
     //사진
-    @Column(name = "imageUrl", nullable = false, columnDefinition = "TEXT")
+    @Column(name = "imageUrl", nullable = true, columnDefinition = "TEXT")
     private String imageUrl;
 
     @Builder
-    public ContentEntity(String name, String location, LocalDate startDate, LocalDate endDate, String organizer, String title, String text, String imageUrl) {
+    public ContentEntity(String name, String location, LocalDate startDate,
+                         LocalDate endDate, String organizer, String title,
+                         String text, String imageUrl,String category, User user) {
         this.name = name;
         this.location = location;
         this.startDate = startDate;
@@ -58,6 +63,14 @@ public class ContentEntity {
         this.title = title;
         this.text = text;
         this.imageUrl = imageUrl;
+        this.category = category;
+        this.user = user;
         //사진
     }
+
+    /*join관계 설정*/
+    //User 테이블과 다대일 관계
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 }

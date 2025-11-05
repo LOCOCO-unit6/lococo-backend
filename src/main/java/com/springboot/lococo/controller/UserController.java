@@ -1,6 +1,7 @@
 package com.springboot.lococo.controller;
 
 import com.springboot.lococo.dto.LoginRequestDto;
+import com.springboot.lococo.dto.LoginResponseDto;
 import com.springboot.lococo.dto.RegisterRequestDto;
 import com.springboot.lococo.jwt.JwtTokenUtil;
 import com.springboot.lococo.service.LogoutService;
@@ -72,11 +73,13 @@ public class UserController {
 
         String jwtToken = JwtTokenUtil.createToken(user.getId(), secretKey, expireTimeMs);
 
+        LoginResponseDto dto = new LoginResponseDto(user.getId(), user.getIdentification(), user.getName(), user.getEmail());
+
 
 
         Map<String, Object> body = new HashMap<>();
         body.put("token", jwtToken);
-        body.put("user", user);
+        body.put("user", dto);
         body.put("message", "로그인 성공");
 
         return ResponseEntity.ok(body);
@@ -96,12 +99,13 @@ public class UserController {
         long expireTimeMs = 1000 * 60 * 60;     // Token 유효 시간 = 60분
 
         String jwtToken = JwtTokenUtil.createToken(user.getId(), secretKey, expireTimeMs);
+        LoginResponseDto dto = new LoginResponseDto(user.getId(), user.getIdentification(), user.getName(), user.getEmail());
 
 
 
         Map<String, Object> body = new HashMap<>();
         body.put("token", jwtToken);
-        body.put("user", user);
+        body.put("user", dto);
         body.put("message", "로그인 성공");
 
         return ResponseEntity.ok(body);

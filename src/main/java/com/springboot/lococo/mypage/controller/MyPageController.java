@@ -1,5 +1,6 @@
 package com.springboot.lococo.mypage.controller;
 
+import com.springboot.lococo.content.dto.CustomUserDetails;
 import com.springboot.lococo.model.User;
 import com.springboot.lococo.mypage.dto.*;
 import com.springboot.lococo.mypage.model.UserReview;
@@ -19,14 +20,14 @@ public class MyPageController {
     private final MyPageService myPageService;
 
     @GetMapping("/userInfo")
-    public ResponseEntity<UserInfoResponseDto> getUserInfo(@AuthenticationPrincipal User user) {
+    public ResponseEntity<UserInfoResponseDto> getUserInfo(@AuthenticationPrincipal CustomUserDetails user) {
 
         //로그인 안하고 접근할 경우
         if (user == null) {
             return ResponseEntity.status(401).build();
         }
 
-        UserInfoResponseDto responseDto = UserInfoResponseDto.from(user);
+        UserInfoResponseDto responseDto = UserInfoResponseDto.from(user.getUser());
         return ResponseEntity.ok(responseDto);
     }
 

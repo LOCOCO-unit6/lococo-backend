@@ -1,6 +1,8 @@
 package com.springboot.lococo.organizermypage.model;
 
 
+import com.springboot.lococo.promotion.model.BlogPostEntity;
+import com.springboot.lococo.promotion.model.InstagramPostEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -8,6 +10,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 import com.springboot.lococo.model.User;
 import com.springboot.lococo.model.Role;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter @Setter
 @NoArgsConstructor
@@ -31,13 +35,23 @@ public class Proposal {
 
     private String affiliation;    // 소속 기준(리스트 필터링용)
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private User organizer;        // 작성자(또는 담당자)
-
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
     private boolean deleted;
+
+    /*join관계 설정*/
+    //User 테이블과 다대일 관계
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;       // 작성자(또는 담당자)
+
+    // 블로그, 인스타 홍보물 일대다
+    @OneToMany(mappedBy = "proposal", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<BlogPostEntity> blogPosts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "proposal", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<InstagramPostEntity> instagramPosts = new ArrayList<>();
 }

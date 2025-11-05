@@ -12,11 +12,14 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins(
-                        "http://localhost:3000",       // 로컬 개발 환경용 (PC에서 개발할 때)
-                        "http://13.55.41.77:3000",     // 아마도 다른 개발/테스트 환경용?
-                        "http://13.55.41.77"  )        // Nginx를 통해 접속하는 실제 배포 환경용)
+                        "http://localhost:3000",
+                        "http://13.55.41.77:3000",
+                        "http://13.55.41.77"
+                )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("*")
+                .allowedHeaders("Authorization", "Content-Type", "X-Requested-With")
+                .exposedHeaders("Authorization") // 응답에서도 Authorization 헤더 볼 수 있게
                 .allowCredentials(true);
     }
+
 }

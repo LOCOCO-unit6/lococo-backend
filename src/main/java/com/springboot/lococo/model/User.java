@@ -1,10 +1,15 @@
 package com.springboot.lococo.model;
 
+import com.springboot.lococo.content.model.ContentEntity;
+import com.springboot.lococo.organizermypage.model.Proposal;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -44,13 +49,23 @@ public class User {
     private Role role;
 
     @Builder
-    public User(String identification, String password, String email, String phoneNumber, String affiliation, Role role) {
+    public User(String identification, String password, String email, String phoneNumber, String affiliation, Role role, String name) {
         this.identification = identification;
         this.password = password;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.affiliation = affiliation;
+        this.name = name;
         this.role = role;
     }
+
+    /*join 관계*/
+    //contentEntity(주최자용 컨텐츠 등록과 일대다 관계)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<ContentEntity> contentEntities = new ArrayList<>();
+
+    //proposal(기획서 생성과 일대다 관계)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Proposal> proposals = new ArrayList<>();
 
 }

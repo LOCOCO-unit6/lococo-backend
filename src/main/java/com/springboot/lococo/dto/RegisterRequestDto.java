@@ -41,7 +41,7 @@ public class RegisterRequestDto {
                 .password(encodedPassword)
                 .email(this.email)
                 .phoneNumber(this.phoneNumber)
-                .affiliation(this.name)
+                .name(this.name)
                 .affiliation(this.affiliation)
                 .role(this.role)
                 .build();

@@ -1,5 +1,6 @@
 package com.springboot.lococo.promotion.model;
 
+import com.springboot.lococo.organizermypage.model.Proposal;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,8 +18,6 @@ public class BlogPostEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "proposal_id", nullable = false)
-    private Long proposalId;
 
     @Column(name = "title", columnDefinition = "TEXT")
     private String title;
@@ -30,10 +29,17 @@ public class BlogPostEntity {
     private String hashtags;
 
     @Builder
-    public BlogPostEntity(Long proposalId, String title, String content, String hashtags) {
-        this.proposalId = proposalId;
+    public BlogPostEntity(Proposal proposal, String title, String content, String hashtags) {
+        this.proposal = proposal;
         this.title = title;
         this.content = content;
         this.hashtags = hashtags;
     }
+
+    /*join관계 설정*/
+    //proposal과 다대일 관계
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "proposal_id", nullable = false)
+    private Proposal proposal;
+
 }

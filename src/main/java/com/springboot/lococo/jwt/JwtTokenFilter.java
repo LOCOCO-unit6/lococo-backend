@@ -1,5 +1,6 @@
 package com.springboot.lococo.jwt;
 
+import com.springboot.lococo.content.dto.CustomUserDetails;
 import com.springboot.lococo.model.User;
 import com.springboot.lococo.service.UserService;
 import jakarta.servlet.FilterChain;
@@ -71,11 +72,19 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
         // 추출한 id(pk)로 User 찾기
         User loginUser = userService.getLoginUserById(Long.parseLong(id));
+        log.info("JwtTokenFilter - loginUser from DB: {}", loginUser);
+
+        CustomUserDetails principal = new CustomUserDetails(loginUser);
+        log.info("JwtTokenFilter - CustomUserDetails Principal: {}", principal);
+
+
 
         // loginUser 정보로 UsernamePasswordAuthenticationToken 발급
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                loginUser, null, List.of(new SimpleGrantedAuthority(loginUser.getRole().name())));
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+        log.info("JwtTokenFilter - SecurityContext Authentication set: {}", SecurityContextHolder.getContext().getAuthentication());
 
         // 권한 부여
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);

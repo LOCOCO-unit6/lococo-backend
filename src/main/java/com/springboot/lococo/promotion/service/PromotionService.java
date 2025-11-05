@@ -72,7 +72,7 @@ public class PromotionService {
 
             // 엔티티 빌드 및 저장
             InstagramPostEntity postEntity = InstagramPostEntity.builder()
-                    .proposalId(contentId)
+                    .proposal(proposal)
                     .title(title)
                     .content(contentStr)
                     .hashtags(combinedHashtags)
@@ -125,7 +125,7 @@ public class PromotionService {
 
             // 엔티티 빌드 및 저장
             BlogPostEntity blogEntity = BlogPostEntity.builder()
-                    .proposalId(contentId)
+                    .proposal(proposal)
                     .title(title)
                     .content(contentStr)
                     .hashtags(combinedHashtags)

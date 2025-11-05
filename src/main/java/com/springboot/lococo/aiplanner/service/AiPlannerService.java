@@ -96,17 +96,17 @@ public class AiPlannerService {
     }
 
     /** 4) 초안 기반 DB 저장 -> Proposal 생성 */
-    public Long saveDraftToDb(SaveProposalRequest req) {
+    public Long saveDraftToDb(Long userId, SaveProposalRequest req) {
         Map raw = readSession(req.getSessionId());
         ProposalDraft draft = objectMapper.convertValue(raw.get("draft"), ProposalDraft.class);
         if (draft == null) throw new IllegalArgumentException("생성된 초안이 없습니다. /planner/proposals 먼저 호출");
 
-        User organizer = userRepository.findById(req.getOrganizerId())
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("organizerId 유효하지 않음"));
 
         String affiliation = (req.getAffiliation() != null && !req.getAffiliation().isBlank())
                 ? req.getAffiliation()
-                : organizer.getAffiliation();
+                : user.getAffiliation();
 
         // 긴 본문을 summary에 저장(마크다운/텍스트)
         String joinedSummary = joinSummary(draft);
@@ -119,7 +119,7 @@ public class AiPlannerService {
                 .summary(joinedSummary)
                 .source(ProposalSource.AI)
                 .affiliation(affiliation)
-                .organizer(organizer)
+                .user(user)
                 .build();
 
         return proposalRepository.save(p).getId();
@@ -136,6 +136,25 @@ public class AiPlannerService {
         if (req.getSummary() != null) p.setSummary(req.getSummary());
         if (req.getSource() != null) p.setSource(req.getSource());
         proposalRepository.save(p);
+    }
+
+    /** 로그인한 유저 기준 내 제안서 조회 */
+    public List<Proposal> getMyProposals(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+        return proposalRepository.findByUserAndDeletedFalse(user);
+    }
+
+    /** 단일 제안서 조회 (소유권 검증 포함) */
+    public Proposal getProposalById(Long userId, Long proposalId) {
+        Proposal proposal = proposalRepository.findById(proposalId)
+                .orElseThrow(() -> new IllegalArgumentException("제안서를 찾을 수 없습니다."));
+
+        if (!proposal.getUser().getId().equals(userId)) {
+            throw new IllegalArgumentException("해당 제안서에 접근 권한이 없습니다.");
+        }
+
+        return proposal;
     }
 
     // ---------- 내부 유틸 ----------

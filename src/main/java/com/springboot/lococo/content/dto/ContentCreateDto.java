@@ -18,7 +18,8 @@ public class ContentCreateDto {
     private String organizer;
     private String title;
     private String text;
-    private String imageUrl;
+    private String category;
+   // private String imageUrl;
 
     public ContentCreateDto(ContentEntity entity) {
 
@@ -29,7 +30,8 @@ public class ContentCreateDto {
         this.organizer = entity.getOrganizer();
         this.startDate = entity.getStartDate();
         this.endDate = entity.getEndDate();
-        this.imageUrl = entity.getImageUrl();
+        this.category = entity.getCategory();
+        //this.imageUrl = entity.getImageUrl();
 
     }
 

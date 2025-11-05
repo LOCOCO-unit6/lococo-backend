@@ -4,9 +4,14 @@ package com.springboot.lococo.aiplanner.controller;
 
 import com.springboot.lococo.aiplanner.dto.*;
 import com.springboot.lococo.aiplanner.service.AiPlannerService;
+import com.springboot.lococo.content.dto.CustomUserDetails;
+import com.springboot.lococo.organizermypage.model.Proposal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,8 +41,10 @@ public class AiPlannerController {
 
     /** (초안 편집 후) DB에 저장 */
     @PostMapping("/planner/proposals/save")
-    public ResponseEntity<Long> save(@RequestBody SaveProposalRequest req) {
-        Long id = service.saveDraftToDb(req);
+    public ResponseEntity<Long> save(@AuthenticationPrincipal CustomUserDetails user,
+                                     @RequestBody SaveProposalRequest req) {
+
+        Long id = service.saveDraftToDb(user.getId(), req);
         return ResponseEntity.ok(id);
     }
 
@@ -46,6 +53,24 @@ public class AiPlannerController {
     public ResponseEntity<Void> update(@PathVariable Long proposalId, @RequestBody UpdateSavedProposalRequest req) {
         service.updateSaved(proposalId, req);
         return ResponseEntity.ok().build();
+    }
+
+    /** 내 모든 제안서 조회 */
+    @GetMapping("/proposals/my")
+    public ResponseEntity<List<ProposalResponseDto>> getMyProposals(@AuthenticationPrincipal CustomUserDetails principal) {
+        List<Proposal> proposals = service.getMyProposals(principal.getId());
+        List<ProposalResponseDto> response = proposals.stream()
+                .map(ProposalResponseDto::new)
+                .toList();
+        return ResponseEntity.ok(response);
+    }
+
+    /** 단일 제안서 조회 */
+    @GetMapping("/proposals/{proposalId}")
+    public ResponseEntity<ProposalResponseDto> getProposal(@PathVariable Long proposalId,
+                                                           @AuthenticationPrincipal CustomUserDetails principal) {
+        Proposal proposal = service.getProposalById(principal.getId(), proposalId);
+        return ResponseEntity.ok(new ProposalResponseDto(proposal));
     }
 
     @GetMapping("/planner/debug")

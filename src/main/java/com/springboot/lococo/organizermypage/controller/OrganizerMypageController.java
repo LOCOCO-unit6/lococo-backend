@@ -1,5 +1,7 @@
 package com.springboot.lococo.organizermypage.controller;
 
+import com.springboot.lococo.content.dto.CustomUserDetails;
+import com.springboot.lococo.mypage.dto.UserInfoResponseDto;
 import com.springboot.lococo.organizermypage.dto.*;
 import com.springboot.lococo.organizermypage.model.ContentType;
 import com.springboot.lococo.organizermypage.model.ProposalSource;
@@ -8,6 +10,7 @@ import com.springboot.lococo.repository.UserRepository;
 import com.springboot.lococo.organizermypage.service.MypageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,6 +34,19 @@ public class OrganizerMypageController {
     @GetMapping
     public ResponseEntity<MypageSummaryDto> mypage(@RequestParam Long organizerId) {
         return ResponseEntity.ok(mypageService.getSummary(organizerId));
+    }
+
+    //주최자 정보조회
+    @GetMapping("/adminInfo")
+    public ResponseEntity<UserInfoResponseDto> getUserInfo(@AuthenticationPrincipal CustomUserDetails user) {
+
+        //로그인 안하고 접근할 경우
+        if (user == null) {
+            return ResponseEntity.status(401).build();
+        }
+
+        UserInfoResponseDto responseDto = UserInfoResponseDto.from(user.getUser());
+        return ResponseEntity.ok(responseDto);
     }
 
     /**
