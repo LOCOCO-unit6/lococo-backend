@@ -19,6 +19,9 @@ public class UserMypageContent {
 
     private String title;
 
+    @Column(name = "content_id")
+    private Long contentId; // ContentEntity의 ID 참조
+
     private String region;        // 지역 추가
     private String description;   // 소개 추가
     private String imageUrl;      // 이미지 URL 추가

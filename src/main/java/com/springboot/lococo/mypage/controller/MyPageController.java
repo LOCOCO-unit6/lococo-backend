@@ -46,12 +46,6 @@ public class MyPageController {
         return ResponseEntity.ok(contents);
     }
 
-    // 관심 콘텐츠 모아보기
-    @GetMapping("/content/favorites")
-    public ResponseEntity<List<ContentResponseDto>> getFavoriteContents() {
-        List<ContentResponseDto> favoriteContents = myPageService.getFavoriteContents();
-        return ResponseEntity.ok(favoriteContents);
-    }
 
     // 이번 달 진행 중 여정
     @GetMapping("/journeys/ongoing")
@@ -110,5 +104,75 @@ public class MyPageController {
     public ResponseEntity<Void> deleteReview(@PathVariable Long reviewId) {
         myPageService.deleteReview(reviewId);
         return ResponseEntity.noContent().build();
+    }
+
+    // 찜하기 추가
+    @PostMapping("/content/{contentId}/favorite")
+    public ResponseEntity<com.springboot.lococo.content.dto.ContentResponseDto> addFavoriteContent(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long contentId) {
+        
+        if (user == null) {
+            return ResponseEntity.status(401).build();
+        }
+
+        myPageService.addFavoriteContent(user, contentId);
+        com.springboot.lococo.content.dto.ContentResponseDto responseDto = 
+            new com.springboot.lococo.content.dto.ContentResponseDto(
+                myPageService.getContentById(contentId)
+            );
+        return ResponseEntity.ok(responseDto);
+    }
+
+    // 찜하기 삭제
+    @DeleteMapping("/content/{contentId}/favorite")
+    public ResponseEntity<Void> removeFavoriteContent(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long contentId) {
+        
+        if (user == null) {
+            return ResponseEntity.status(401).build();
+        }
+
+        myPageService.removeFavoriteContent(user, contentId);
+        return ResponseEntity.noContent().build();
+    }
+
+    // 유저별 찜한 콘텐츠 목록 조회 (마이페이지 카드 기준)
+    @GetMapping("/content/favorites")
+    public ResponseEntity<List<com.springboot.lococo.mypage.dto.ContentResponseDto>> getUserFavoriteContents(
+            @AuthenticationPrincipal User user) {
+        
+        if (user == null) {
+            return ResponseEntity.status(401).build();
+        }
+
+        List<com.springboot.lococo.mypage.dto.ContentResponseDto> favoriteContents = 
+            myPageService.getUserFavoriteMypageContents(user);
+        return ResponseEntity.ok(favoriteContents);
+    }
+
+    // 찜하기 토글 (추가/삭제)
+    @PostMapping("/content/{contentId}/favorite/toggle")
+    public ResponseEntity<com.springboot.lococo.content.dto.ContentResponseDto> toggleFavoriteContent(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long contentId) {
+        
+        if (user == null) {
+            return ResponseEntity.status(401).build();
+        }
+
+        boolean isFavorite = myPageService.isFavoriteContent(user, contentId);
+        if (isFavorite) {
+            myPageService.removeFavoriteContent(user, contentId);
+        } else {
+            myPageService.addFavoriteContent(user, contentId);
+        }
+        
+        com.springboot.lococo.content.dto.ContentResponseDto responseDto = 
+            new com.springboot.lococo.content.dto.ContentResponseDto(
+                myPageService.getContentById(contentId)
+            );
+        return ResponseEntity.ok(responseDto);
     }
 }
