@@ -6,8 +6,7 @@ import com.springboot.lococo.dto.RegisterRequestDto;
 import com.springboot.lococo.jwt.JwtTokenUtil;
 import com.springboot.lococo.service.LogoutService;
 import com.springboot.lococo.service.UserService;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -17,8 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import com.springboot.lococo.model.User;
 
 
-import java.util.HashMap;
-import java.util.Map;
+
 
 
 @RestController
@@ -56,59 +54,60 @@ public class UserController {
     }
 
     @PostMapping("/user/login")
-    public ResponseEntity<Map<String, Object>> userLogin(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
-
+    public ResponseEntity<LoginResponseDto> userLogin(@RequestBody LoginRequestDto loginRequestDto) {
         User user = userService.userLogin(loginRequestDto);
 
         if (user == null) {
-            Map<String, Object> errorBody = new HashMap<>();
-            errorBody.put("message", "로그인에 실패했습니다. 계정 정보를 확인하거나 관리자에게 문의하세요.");
-            return ResponseEntity.status(401).body(errorBody);
+            // 로그인 실패 시
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new LoginResponseDto(null, null, null, null, null, null, "로그인 실패"));
         }
 
-        // 로그인 성공 => Jwt Token 발급
-
-
-        long expireTimeMs = 1000 * 60 * 60;     // Token 유효 시간 = 60분
-
+        // 로그인 성공 시 JWT 발급
+        long expireTimeMs = 1000 * 60 * 60; // 60분
         String jwtToken = JwtTokenUtil.createToken(user.getId(), secretKey, expireTimeMs);
 
-        LoginResponseDto dto = new LoginResponseDto(user.getId(), user.getIdentification(), user.getName(), user.getEmail());
+        // DTO에 필요한 정보만 담기
+        LoginResponseDto response = new LoginResponseDto(
+                jwtToken,
+                user.getId(),
+                user.getIdentification(),
+                user.getName(),
+                user.getEmail(),
+                user.getRole().name(),
+                "로그인 성공"
+        );
 
-
-
-        Map<String, Object> body = new HashMap<>();
-        body.put("token", jwtToken);
-        body.put("user", dto);
-        body.put("message", "로그인 성공");
-
-        return ResponseEntity.ok(body);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/admin/login")
-    public ResponseEntity<Map<String, Object>> adminLogin(@RequestBody LoginRequestDto loginRequestDto) {
+    public ResponseEntity<LoginResponseDto> adminLogin(@RequestBody LoginRequestDto loginRequestDto) {
 
         User user = userService.adminLogin(loginRequestDto);
 
         if (user == null) {
-            Map<String, Object> errorBody = new HashMap<>();
-            errorBody.put("message", "로그인에 실패했습니다. 계정 정보를 확인하거나 관리자에게 문의하세요.");
-            return ResponseEntity.status(401).body(errorBody);
+            return ResponseEntity
+                    .status(401)
+                    .body(new LoginResponseDto(null, null, null, null, null, null, "로그인 실패"));
         }
 
-        long expireTimeMs = 1000 * 60 * 60;     // Token 유효 시간 = 60분
-
+        long expireTimeMs = 1000 * 60 * 60; // 1시간
         String jwtToken = JwtTokenUtil.createToken(user.getId(), secretKey, expireTimeMs);
-        LoginResponseDto dto = new LoginResponseDto(user.getId(), user.getIdentification(), user.getName(), user.getEmail());
 
+        // 응답 DTO에 모든 정보 포함
+        LoginResponseDto dto = new LoginResponseDto(
+                jwtToken,
+                user.getId(),
+                user.getIdentification(),
+                user.getName(),
+                user.getEmail(),
+                user.getRole().name(),
+                "로그인 성공"
+        );
 
-
-        Map<String, Object> body = new HashMap<>();
-        body.put("token", jwtToken);
-        body.put("user", dto);
-        body.put("message", "로그인 성공");
-
-        return ResponseEntity.ok(body);
+        return ResponseEntity.ok(dto);
     }
 
 
